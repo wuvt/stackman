@@ -1,0 +1,19 @@
+.mainContainer {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.exploreContainer {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.playbackContainer {
+  display: flex;
+  border-top-width: 1px;
+}
+.playbackContainer > * ~ * {
+  border-left-width: 1px;
+}

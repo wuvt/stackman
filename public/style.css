@@ -1,0 +1,139 @@
+/* Roboto Mono */
+@font-face {
+  font-display: swap;
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 400;
+  src: url('/fonts/roboto-mono-all-400-normal.woff') format('woff');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 500;
+  src: url('/fonts/roboto-mono-all-500-normal.woff') format('woff');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 600;
+  src: url('/fonts/roboto-mono-all-600-normal.woff') format('woff');
+}
+@font-face {
+  font-display: swap;
+  font-family: 'Roboto Mono';
+  font-style: normal;
+  font-weight: 700;
+  src: url('/fonts/roboto-mono-all-700-normal.woff') format('woff');
+}
+
+/* Resets based on sindresorhus/modern-normalize and tailwindlabs/tailwindcss */
+*,
+::before,
+::after {
+  border-color: rgb(229, 231, 235);
+  border-style: solid;
+  border-width: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  line-height: 1.5;
+  margin: 0;
+  -moz-tab-size: 4;
+  tab-size: 4;
+}
+
+/* Add the proper font weight for Safari */
+b,
+strong {
+  font-weight: bolder;
+}
+
+/* Remove margins and padding from buttons and inputs */
+button,
+input {
+  color: inherit;
+  font-family: inherit;
+  font-size: 100%;
+  font-weight: inherit;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove button text-transform inherit for Firefox */
+button {
+  text-transform: none;
+}
+
+/* Remove the default button style */
+button,
+[type="button"],
+[type="reset"],
+[type="submit"] {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+}
+
+/* Prefer the fancy focus style in Firefox */
+:-moz-focusring {
+  outline: auto;
+}
+
+/* Remove additional ':invalid' styles in Firefox */
+:-moz-ui-invalid {
+  box-shadow: none;
+}
+
+/* remove margin from text elements */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* constrain images to parent */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Reset input placeholder opacity for Firefox, and give it color */
+input::placeholder,
+textarea::placeholder {
+  color: rbg(161 161 170);
+  opacity: 1;
+}
+
+/* Set the cursor for buttons to pointer */
+button,
+[role="button"] {
+  cursor: pointer;
+}
+
+/* Reset the cursor for disabled buttons */
+:disabled {
+  cursor: default;
+}
+
+/* Display images as block with centered vertical alignment */
+img,
+svg {
+  display: block;
+  vertical-align: middle;
+}
