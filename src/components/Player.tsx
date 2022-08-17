@@ -32,7 +32,7 @@ const PlayButton = (
       ref={buttonRef}
       onClick={onClick}
     >
-      <svg viewBox="0 0 48 48" className={styles.playButton}>
+      <svg viewBox="0 0 48 48">
         <defs>
           <mask id="icon">
             <rect fill="white" x="0" y="0" width="100%" height="100%" />

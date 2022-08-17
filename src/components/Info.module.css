@@ -1,0 +1,81 @@
+.infoPanel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  width: 26rem;
+}
+
+.infoHeader {
+  align-items: center;
+  display: flex;
+}
+
+.infoReview {
+  border-top-width: 1px;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: 0 1rem 1rem;
+}
+
+.infoFooter {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.textBox {
+  padding: 0.5rem 1rem;
+}
+
+.title {
+  border-bottom-width: 1px;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 2rem;
+  padding: 1rem;
+}
+
+.artist {
+  flex: 1 1 auto;
+  font-size: 1.125rem;
+  font-weight: 500;
+  line-height: 1.75rem;
+}
+
+.year {
+  border-left-width: 1px;
+  color: rgb(63 63 70);
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.albumArt {
+  border-width: 0 1px 1px 0;
+  padding: 1rem;
+  margin: 0 1rem 0 -1rem;
+  overflow-wrap: break-word;
+  float: left;
+}
+.albumArt > img {
+  border-radius: 0.25rem;
+  height: 7rem;
+  width: 7rem;
+}
+
+.genre {
+  margin: 0 -1rem 0.5rem 8rem;
+  border-bottom-width: 1px;
+  text-align: right;
+}
+
+.highlights {
+  border-width: 1px 1px 0 0;
+  flex: 9999 1 auto;
+}
+
+.label {
+  color: rgb(63 63 70);
+  border-top-width: 1px;
+  flex: 1 1 auto;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
