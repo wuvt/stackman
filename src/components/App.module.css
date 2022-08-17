@@ -10,10 +10,38 @@
   min-height: 0;
 }
 
+.libraryContainer {
+  border-right-width: 1px;
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+.libraryContainer > * ~ * {
+  border-top-width: 1px;
+}
+
 .playbackContainer {
   display: flex;
   border-top-width: 1px;
 }
 .playbackContainer > * ~ * {
   border-left-width: 1px;
+}
+
+.filterBar {
+  display: flex;
+}
+
+.search {
+  color: rgb(82 82 91);
+  flex: 1 1 auto;
+  padding: 1rem;
+  transition-duration: 150ms;
+  transition-property: outline-offset, outline-width;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.search:focus-visible {
+  outline: 4px solid rgb(24 24 27);
+  outline-offset: -4px;
 }

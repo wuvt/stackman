@@ -40,6 +40,7 @@
 
 html,
 body {
+  color: rgb(24 24 27);
   font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   line-height: 1.5;
   margin: 0;
@@ -116,7 +117,7 @@ img {
 /* Reset input placeholder opacity for Firefox, and give it color */
 input::placeholder,
 textarea::placeholder {
-  color: rbg(161 161 170);
+  color: rgb(161 161 170);
   opacity: 1;
 }
 

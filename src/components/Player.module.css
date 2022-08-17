@@ -14,6 +14,10 @@
   flex: none;
   height: 3rem;
   width: 3rem;
+  transition: outline 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.playButton:focus {
+  outline: 4px solid rgb(24 24 27);
 }
 .playButton:not(.playButtonDisabled):hover {
   color: rgb(63 63 70);

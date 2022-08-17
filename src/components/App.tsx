@@ -5,11 +5,26 @@ import Player from './Player';
 
 import styles from './App.module.css';
 
+const FilterBar = () => {
+  return (
+    <div class={styles.filterBar}>
+      <input
+        class={styles.search}
+        placeholder="Search..."
+      >
+      </input>
+    </div>
+  )
+}
+
 const App = () => {
   return (
     <div class={styles.mainContainer}>
       <div class={styles.exploreContainer}>
-        <Library />
+        <div id="library" class={styles.libraryContainer}>
+          <FilterBar />
+          <Library />
+        </div>
         <Info />
       </div>
       <div class={styles.playbackContainer}>
