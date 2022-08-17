@@ -2,7 +2,7 @@
   "name": "stackman",
   "version": "0.0.1",
   "description": "",
-  "license" : "AGPL-3.0-or-later",
+  "license": "AGPL-3.0-or-later",
   "scripts": {
     "start": "wmr",
     "build": "wmr build --minify",
@@ -10,7 +10,9 @@
     "serve": "wmr serve"
   },
   "dependencies": {
-    "preact": "^10.10.2"
+    "@fontsource/roboto-mono": "^4.5.8",
+    "preact": "^10.10.2",
+    "wobble": "^1.5.1"
   },
   "devDependencies": {
     "typescript": "^4.7.4",

@@ -12,10 +12,11 @@
     "target": "ESNext",
     "module": "esnext",
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true
   },
-  "include": ["public/**/*"],
+  "include": ["node_modules/wmr/types.d.ts", "public/**/*"],
   "typeAcquisition": {
     "enable": true
   }

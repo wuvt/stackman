@@ -1,0 +1,57 @@
+.playerContainer {
+  display: flex;
+  flex: 1 1 auto;
+}
+
+.playButtonContainer {
+  align-items: center;
+  display: flex;
+  padding: 0 1.25rem;
+}
+
+.playButton {
+  border-radius: 1.5rem;
+  flex: none;
+  height: 3rem;
+  width: 3rem;
+}
+.playButton:not(.playButtonDisabled):hover {
+  color: rgb(63 63 70);
+}
+.playButton path {
+  transition: d 140ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.playButtonDisabled {
+  color: rgb(82 82 91);
+}
+
+.playBarContainer {
+  align-items: center;
+  display: flex;
+  flex: 1 1 auto;
+  padding-right: 1.5rem;
+}
+
+.playBarRail {
+  background-color: rgb(244 244 245);
+  border-radius: 0.25rem;
+  display: flex;
+  flex: 1 1 auto;
+  margin: 0 1rem;
+}
+
+.playBarFill {
+  background-color: rgb(24 24 27);
+  border-radius: 0.25rem 0 0 0.25rem;
+  flex: none;
+  height: 0.5rem;
+}
+
+.playBarThumb {
+  background-color: rgb(24 24 27);
+  border-radius: 0.5rem;
+  height: 1rem;
+  margin: -0.25rem 0 -0.25rem -0.5rem;
+  width: 1rem;
+}

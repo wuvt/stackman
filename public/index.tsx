@@ -1,5 +1,5 @@
 import { render } from 'preact';
 
-const App = () => <h1>Hi</h1>;
+import App from '../src/components/App';
 
-render(<App />, document.getElementById('app') || document.body);
+render(<App />, document.body);

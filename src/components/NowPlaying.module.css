@@ -1,0 +1,45 @@
+.nowPlayingContainer {
+  align-items: center;
+  display: flex;
+  padding: 0 1rem 0 0.5rem;
+}
+
+.albumArt {
+  padding: 0.5rem 1rem 0.5rem 0;
+}
+.albumArt > img,
+.albumArt > .albumArtBlank {
+  border-radius: 0.25rem;
+  height: 4rem;
+  width: 4rem;
+}
+
+.albumArtBlank {
+  background-color: rgb(212 212 216);
+}
+
+.nowPlayingInfo {
+  display: flex;
+  flex-direction: column;
+  width: 9rem;
+}
+
+.nowPlayingTitle {
+  color: rgb(24 24 27);
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  font-weight: 500;
+  line-height: 1.375;
+  overflow: hidden;
+}
+
+.nowPlayingArtist {
+  color: rgb(63 63 70);
+  font-size: 0.875rem;
+  font-weight: 700;
+  line-height: 1.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
