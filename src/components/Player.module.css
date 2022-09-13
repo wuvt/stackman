@@ -1,22 +1,18 @@
 .playerContainer {
-  display: flex;
-  flex: 1 1 auto;
-}
-
-.playButtonContainer {
   align-items: center;
   display: flex;
-  padding: 0 1.25rem;
+  flex: 1 1 auto;
 }
 
 .playButton {
   border-radius: 1.5rem;
   flex: none;
   height: 3rem;
-  width: 3rem;
+  margin: 0 1.25rem;
   transition: outline 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  width: 3rem;
 }
-.playButton:focus {
+.playButton:focus-visible {
   outline: 4px solid rgb(24 24 27);
 }
 .playButton:not(.playButtonDisabled):hover {
@@ -28,13 +24,6 @@
 
 .playButtonDisabled {
   color: rgb(82 82 91);
-}
-
-.playBarContainer {
-  align-items: center;
-  display: flex;
-  flex: 1 1 auto;
-  padding-right: 1.5rem;
 }
 
 .playBarRail {
