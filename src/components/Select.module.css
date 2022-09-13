@@ -1,0 +1,68 @@
+.selectContainer {
+  border-left-width: 1px;
+  flex-basis: 15rem;
+  position: relative;
+}
+
+.selectTarget {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  transition-duration: 150ms;
+  transition-property: background-color, outline-offset, outline-width;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+.selectTarget:hover {
+  background-color: rgb(228 228 231);
+}
+.selectTarget:focus-visible {
+  outline: 4px solid rgb(24 24 27);
+  outline-offset: -4px;
+}
+
+.selectTargetUnfocus {
+  outline: none !important;
+}
+
+.targetIcon {
+  height: 1.5rem;
+  width: 1.5rem;
+}
+
+.targetIconActive {
+  transform: rotate(180deg);
+}
+
+.selectList {
+  border-left-width: 1px;
+  border-top-width: 1px;
+  display: none;
+  left: -1px;
+  position: absolute;
+  width: calc(100% + 1px);
+}
+
+.open .selectList {
+  display: block;
+}
+
+.selectItem {
+  background-color: #ffffff;
+  border-bottom-width: 1px;
+  padding: 1rem;
+  text-align: left;
+  transition-duration: 150ms;
+  transition-property: background-color, outline-offset, outline-width;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+.selectItem:hover {
+  background-color: rgb(228 228 231);
+}
+
+.selectItemActive {
+  outline: 4px solid rgb(24 24 27);
+  outline-offset: -4px;
+}
