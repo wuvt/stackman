@@ -25,6 +25,7 @@ const PlayButton = (
 
   return (
     <button
+      aria-label={playing ? "Pause" : "Play"}
       class={classnames(styles.playButton, {
         [styles.playButtonDisabled]: disabled,
       })}
@@ -32,24 +33,24 @@ const PlayButton = (
       ref={buttonRef}
       onClick={onClick}
     >
-      <svg viewBox="0 0 48 48">
+      <svg aria-hidden viewBox="0 0 48 48">
         <defs>
           <mask id="icon">
             <rect fill="white" x="0" y="0" width="100%" height="100%" />
             <path
               fill="black"
-              d="m18.85 33 14.2-9.05 0 0-14.2 0Z"
+              d="m18.85 33 14.2-9-0.2-0.1-14 0Z"
               style={playing ? { d: 'path("m15.8 29.9 16.4 0 0-3.4-16.4 0Z")' } : { }}
             />
             <path
               fill="black"
-              d="m18.85 24.95 14.2 0 0 0-14.2-9.05Z"
+              d="m18.85 24 14 0.1 0.2-0.1-14.2-9Z"
               style={playing ? { d: 'path("m15.8 21.5 16.4 0 0-3.4-16.4 0Z")' } : { }}
             />
           </mask>
         </defs>
 
-        <circle fill="currentColor" cx="24" cy="24" r="21.25" mask="url(#icon)" />
+        <circle fill="currentColor" cx="24" cy="24" r="21.3" mask="url(#icon)" />
       </svg>
     </button>
   );
@@ -60,21 +61,17 @@ const Player = () => {
 
   return (
     <div class={styles.playerContainer}>
-      <div class={styles.playButtonContainer}>
-        <PlayButton
-          disabled={false}
-          playing={playing}
-          onClick={() => setPlaying(prev => !prev)}
-        />
+      <PlayButton
+        disabled={false}
+        playing={playing}
+        onClick={() => setPlaying(prev => !prev)}
+      />
+      <span>0:00</span>
+      <div class={styles.playBarRail}>
+        <div class={styles.playBarFill} style={{ width: '0' }}></div>
+        <div class={styles.playBarThumb}></div>
       </div>
-      <div class={styles.playBarContainer}>
-        <div>0:00</div>
-        <div class={styles.playBarRail}>
-          <div class={styles.playBarFill} style={{ width: '0' }}></div>
-          <div class={styles.playBarThumb}></div>
-        </div>
-        <div>0:00</div>
-      </div>
+      <span>0:00</span>
     </div>
   );
 }
