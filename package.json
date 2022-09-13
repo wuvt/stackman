@@ -7,6 +7,7 @@
     "start": "wmr",
     "build": "wmr build --minify",
     "check": "tsc --noEmit",
+    "watch": "tsc --watch",
     "serve": "wmr serve"
   },
   "dependencies": {
