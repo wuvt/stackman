@@ -61,7 +61,7 @@ const App = () => {
       <div class={styles.exploreContainer}>
         <div id="library" class={styles.libraryContainer}>
           <FilterBar newOn={newOn} handleNewButton={handleNewButton}/>
-          <Library albums={albums} cUUID={currentUUID} handleInfo={handleInfo}/>
+          <Library albums={albums} cUUID={currentUUID} handleInfo={handleInfo} newOn={newOn}/>
         </div>
         <Info album={albums.filter((album) => { return album.uuid === currentUUID })[0]} />
       </div>

@@ -4,8 +4,8 @@ import {useState} from "preact/hooks";
 
 const Album = (props: { album: any, cUUID: string, handleInfo: Function; }) => {
     const stackColors: {[key: string]: string} = {
-        'RCK': 'red',
-        'RPM': 'teal',
+        'RCK': '#F87171',
+        'RPM': '#2DD4BF',
     };
 
 

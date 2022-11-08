@@ -1,0 +1,8 @@
+.cardContainer {
+    display: flex;
+    padding: 1.5rem;
+    overflow-y: auto;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    height: 100%;
+}
