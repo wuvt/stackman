@@ -1,6 +1,6 @@
 import Album from "./Album";
 
-const Library = (props: { albums: any, cUUID: number, handleInfo: Function;}) => {
+const Library = (props: { albums: any, cUUID: string, handleInfo: Function;}) => {
   return (
     <div>
         {props.albums.map((album: any) => {
