@@ -4,6 +4,8 @@ import NowPlaying from './NowPlaying';
 import Player from './Player';
 import Select from './Select';
 
+import a from './albums.json';
+
 import styles from './App.module.css';
 import {useCallback, useState} from "preact/hooks";
 
@@ -13,34 +15,7 @@ const stacks = [
   { key: 'RPM', value: 'Electronic' },
 ];
 
-const albums = [
-    {
-        title: 'Album 1',
-        artist: 'Album Artist',
-        year: 'YYYY',
-        img: '',
-        genre: 'Rock',
-        stack: 'RCK',
-        review: 'This is a detailed review of the album',
-        highlights: '1, 2, 3',
-        label: 'Record Label',
-        uuid: '1234',
-        is_new: true
-    },
-    {
-        title: 'Album 2',
-        artist: 'Album Artist',
-        year: 'YYYY',
-        img: '',
-        genre: 'Electronic',
-        stack: 'RPM',
-        review: 'This is a detailed review of the album',
-        highlights: '1, 2, 3',
-        label: 'Record Label',
-        uuid: '1235',
-        is_new: true
-    }
-];
+const albums = a;
 
 const FilterBar = (props: { newOn: boolean, handleNewButton: Function;}) => {
 
@@ -66,10 +41,10 @@ const FilterBar = (props: { newOn: boolean, handleNewButton: Function;}) => {
 const App = () => {
 
     const [ newOn, setNewOn ] = useState(false);
-    const [ currentUUID, setCurrentUUID ] = useState(0);
+    const [ currentUUID, setCurrentUUID ] = useState('0');
 
-    const handleInfo = useCallback( (uuid: number) => {
-        setCurrentUUID(prevUUID => prevUUID===uuid ? 0: uuid);
+    const handleInfo = useCallback( (uuid: string) => {
+        setCurrentUUID(prevUUID => prevUUID===uuid ? '0': uuid);
         },
         [],
     );
@@ -88,7 +63,7 @@ const App = () => {
           <FilterBar newOn={newOn} handleNewButton={handleNewButton}/>
           <Library albums={albums} cUUID={currentUUID} handleInfo={handleInfo}/>
         </div>
-        <Info album={albums.filter((album) => { return +album.uuid === currentUUID })[0]} />
+        <Info album={albums.filter((album) => { return album.uuid === currentUUID })[0]} />
       </div>
       <div class={styles.playbackContainer}>
         <NowPlaying />
