@@ -1,0 +1,66 @@
+.trackContainer {
+    border-left-width: 1px;
+    border-bottom-width: 1px;
+    display: flex;
+}
+
+.trackNumBox {
+    text-align: center;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    width: 2.5rem;
+}
+
+.trackTitleBox {
+    padding: 0.5rem 1rem;
+    border-left-width: 1px;
+    flex-wrap: nowrap;
+    flex: 1 1 auto;
+    min-width: 0px;
+    display: flex;
+}
+
+.trackLengthBox {
+    border-left-width: 1px;
+    text-align: right;
+    padding: 0.5rem 1rem;
+    flex-basis: 5rem;
+}
+
+.trackArtistBox {
+    border-left-width: 1px;
+    padding: 0.5rem 1rem;
+    white-space: nowrap
+}
+
+.fccSVG {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-left: 0.5rem;
+}
+
+.trackmanBox {
+    border-left-width: 1px;
+    padding: 0.5rem 1rem;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+.trackmanBox:hover {
+    background-color: rgb(228 228 231);
+}
+
+.playBox {
+    border-left-width: 1px;
+    font-weight: bold;
+    padding: 0.5rem;
+}
+
+.playBox:hover {
+    background-color: rgb(228 228 231);
+}
+
+.playButton {
+    width: 1.25rem;
+    height: 1.25rem;
+}

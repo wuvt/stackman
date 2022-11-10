@@ -57,6 +57,11 @@
   background-color: #fac643;
 }
 
+.newSVG {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
 .search {
   color: rgb(82 82 91);
   flex: 1 1 auto;

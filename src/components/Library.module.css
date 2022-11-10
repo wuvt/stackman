@@ -1,3 +1,8 @@
+.libraryContainer {
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
 .cardContainer {
     display: flex;
     padding: 1.5rem;

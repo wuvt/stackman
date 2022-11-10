@@ -4,7 +4,7 @@ import styles from './Library.module.css';
 
 const Library = (props: { albums: any, cUUID: string, handleInfo: Function, newOn: boolean;}) => {
   return (
-    <div>
+    <div class={styles.libraryContainer}>
         {!props.newOn && props.albums.map((album: any) => {
             return <Album album={album} cUUID={props.cUUID} handleInfo={props.handleInfo}/>;
         })}
