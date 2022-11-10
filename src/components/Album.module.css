@@ -93,6 +93,11 @@
     background-color: rgb(147, 147, 147);
 }
 
+.infoSVG {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
 .dropdownBox {
     width: 3.5rem;
     margin-top: auto;
@@ -102,4 +107,13 @@
 .dropdownBox:hover {
     background-color: rgb(228 228 231);
 }
+
+.tracksBox {
+    padding-left: 2.5rem;
+    border-top-width: 1px;
+    flex-direction: column;
+    display: flex;
+    background-color: #FAFAFA;
+}
+
 
