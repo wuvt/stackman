@@ -50,14 +50,25 @@
     background-color: rgb(228 228 231);
 }
 
-.playBox {
+.playBoxOff {
     border-left-width: 1px;
     font-weight: bold;
     padding: 0.5rem;
 }
 
-.playBox:hover {
+.playBoxOff:hover {
     background-color: rgb(228 228 231);
+}
+
+.playBoxOn {
+    border-left-width: 1px;
+    font-weight: bold;
+    padding: 0.5rem;
+    background-color: rgb(0, 0, 0);
+}
+
+.playBoxOn:hover {
+    background-color: rgb(147, 147, 147);
 }
 
 .playButton {

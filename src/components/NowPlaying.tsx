@@ -1,17 +1,20 @@
 import styles from './NowPlaying.module.css';
 
-const NowPlaying = () => {
+const NowPlaying = (props: { album: any, cID: number;}) => {
   return (
     <div class={styles.nowPlayingContainer}>
       <div class={styles.albumArt}>
-        <div class={styles.albumArtBlank}></div>
+          { props.cID === -1 && <div class={styles.albumArtBlank}></div>}
+          { props.cID !== -1 &&
+              <img src={props.album.img}/>
+          }
       </div>
       <div class={styles.nowPlayingInfo}>
         <div class={styles.nowPlayingTitle}>
-          {'No Track Selected'}
+          {props.cID===-1 ? 'No Track Selected' : props.album.tracks[props.cID-1].title}
         </div>
         <div class={styles.nowPlayingArtist}>
-          {' '}
+          {props.cID===-1 ? '' : props.album.artist}
         </div>
       </div>
     </div>

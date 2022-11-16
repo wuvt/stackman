@@ -1,6 +1,6 @@
 import styles from './Track.module.css';
 
-const Track = (props: { album: any, track: any, index: number;}) => {
+const Track = (props: { album: any, track: any, index: number, playingUUID: string, cID: number, handlePlay: Function;}) => {
     return (
         <div class={styles.trackContainer}>
             <div class={styles.trackNumBox}>{props.track.id}</div>
@@ -21,9 +21,9 @@ const Track = (props: { album: any, track: any, index: number;}) => {
             }
             <div class={styles.trackLengthBox}>{Math.floor(props.track.length/60)}:{(props.track.length%60).toString().padStart(2, '0')}</div>
             <button class={styles.trackmanBox}>Send To Trackman</button>
-            <button class={styles.playBox}>
+            <button class={props.album.uuid===props.playingUUID && props.cID===props.index+1? styles.playBoxOn: styles.playBoxOff} onClick={() => props.handlePlay(props.album.uuid, props.track.id)}>
                 <svg class={styles.playButton} viewBox="0 0 20 20">
-                    <path fill="currentColor" d="M6.833 15.583V4.375l8.792 5.604Z"/>
+                    <path fill={props.album.uuid===props.playingUUID && props.cID===props.index+1? 'white':'black' } d="M6.833 15.583V4.375l8.792 5.604Z"/>
                 </svg>
             </button>
         </div>

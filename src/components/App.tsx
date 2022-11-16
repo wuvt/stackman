@@ -42,9 +42,19 @@ const App = () => {
 
     const [ newOn, setNewOn ] = useState(false);
     const [ currentUUID, setCurrentUUID ] = useState('0');
+    const [ playingUUID, setPlayingUUID ] = useState('0');
+    const [ currentID, setCurrentID ] = useState(-1);
 
     const handleInfo = useCallback( (uuid: string) => {
         setCurrentUUID(prevUUID => prevUUID===uuid ? '0': uuid);
+        },
+        [],
+    );
+
+    const handlePlay = useCallback( (uuid: string, id: number) => {
+            setCurrentID(prevID => prevID===id ? -1: id);
+            setPlayingUUID(uuid);
+            console.log(uuid, id)
         },
         [],
     );
@@ -61,13 +71,13 @@ const App = () => {
       <div class={styles.exploreContainer}>
         <div id="library" class={styles.libraryContainer}>
           <FilterBar newOn={newOn} handleNewButton={handleNewButton}/>
-          <Library albums={albums} cUUID={currentUUID} handleInfo={handleInfo} newOn={newOn}/>
+          <Library albums={albums} cUUID={currentUUID} handleInfo={handleInfo} handlePlay={handlePlay} newOn={newOn} playingUUID={playingUUID} cID={currentID}/>
         </div>
         <Info album={albums.filter((album) => { return album.uuid === currentUUID })[0]} />
       </div>
       <div class={styles.playbackContainer}>
-        <NowPlaying />
-        <Player />
+        <NowPlaying album={albums.filter((album) => { return album.uuid === playingUUID })[0]} cID={currentID}/>
+        <Player album={albums.filter((album) => { return album.uuid === playingUUID })[0]} cID={currentID}/>
       </div>
     </div>
     );
