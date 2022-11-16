@@ -56,7 +56,7 @@ const PlayButton = (
   );
 }
 
-const Player = () => {
+const Player = (props: { album: any, cID: number;}) => {
   const [ playing, setPlaying ] = useState(false);
 
   return (
@@ -71,7 +71,8 @@ const Player = () => {
         <div class={styles.playBarFill} style={{ width: '0' }}></div>
         <div class={styles.playBarThumb}></div>
       </div>
-      <span>0:00</span>
+      {props.cID !== -1 && <span class={styles.trackLength}>{Math.floor(props.album.tracks[props.cID-1].length/60)}:{(props.album.tracks[props.cID-1].length%60).toString().padStart(2, '0')}</span>}
+        {props.cID === -1 && <span class={styles.trackLength}>0:00</span>}
     </div>
   );
 }

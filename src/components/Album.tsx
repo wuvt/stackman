@@ -23,7 +23,7 @@ const DropdownButton = (props: {dropdownOn: boolean, handleDropdown: Function}) 
     );
 }
 
-const Album = (props: { album: any, cUUID: string, handleInfo: Function; }) => {
+const Album = (props: { album: any, cUUID: string, playingUUID: string, cID: number, handleInfo: Function, handlePlay: Function; }) => {
     const stackColors: {[key: string]: string} = {
         'RCK': '#F87171',
         'RPM': '#2DD4BF',
@@ -65,7 +65,7 @@ const Album = (props: { album: any, cUUID: string, handleInfo: Function; }) => {
         </div>
         {dropdownOn && <div class={styles.tracksBox}>
             {props.album.tracks.map((track: any, index: number) => {
-                    return <Track album={props.album} track={track} index={index}></Track>
+                    return <Track album={props.album} track={track} index={index} handlePlay={props.handlePlay} playingUUID={props.playingUUID} cID={props.cID}></Track>
                 }
             )}
         </div>
