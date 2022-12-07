@@ -1,4 +1,5 @@
 import styles from './Track.module.css';
+import convertSecondsToLength from "../utils/convertSecondsToLength";
 
 const Track = (props: { album: any, track: any, index: number, playingUUID: string, cID: number, handlePlay: Function;}) => {
     return (
@@ -19,7 +20,7 @@ const Track = (props: { album: any, track: any, index: number, playingUUID: stri
             {props.album.artist !== props.track.artist &&
                 <div class={styles.trackArtistBox}>{props.track.artist}</div>
             }
-            <div class={styles.trackLengthBox}>{Math.floor(props.track.length/60)}:{(props.track.length%60).toString().padStart(2, '0')}</div>
+            <div class={styles.trackLengthBox}>{convertSecondsToLength(props.track.length)}</div>
             <button class={styles.trackmanBox}>Send To Trackman</button>
             <button class={props.album.uuid===props.playingUUID && props.cID===props.index+1? styles.playBoxOn: styles.playBoxOff} onClick={() => props.handlePlay(props.album.uuid, props.track.id)}>
                 <svg class={styles.playButton} viewBox="0 0 20 20">
