@@ -12,7 +12,7 @@ The entirety of this software is available under the GNU Affero General Public
 License:
 
 ```
-Copyright 2022 Jared Beller.
+Copyright 2022 WUVT-FM et al.
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
