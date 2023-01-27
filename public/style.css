@@ -1,31 +1,31 @@
 /* Roboto Mono */
 @font-face {
   font-display: swap;
-  font-family: 'Roboto Mono';
+  font-family: "Roboto Mono";
   font-style: normal;
   font-weight: 400;
-  src: url('/fonts/roboto-mono-all-400-normal.woff') format('woff');
+  src: url("/fonts/roboto-mono-all-400-normal.woff") format("woff");
 }
 @font-face {
   font-display: swap;
-  font-family: 'Roboto Mono';
+  font-family: "Roboto Mono";
   font-style: normal;
   font-weight: 500;
-  src: url('/fonts/roboto-mono-all-500-normal.woff') format('woff');
+  src: url("/fonts/roboto-mono-all-500-normal.woff") format("woff");
 }
 @font-face {
   font-display: swap;
-  font-family: 'Roboto Mono';
+  font-family: "Roboto Mono";
   font-style: normal;
   font-weight: 600;
-  src: url('/fonts/roboto-mono-all-600-normal.woff') format('woff');
+  src: url("/fonts/roboto-mono-all-600-normal.woff") format("woff");
 }
 @font-face {
   font-display: swap;
-  font-family: 'Roboto Mono';
+  font-family: "Roboto Mono";
   font-style: normal;
   font-weight: 700;
-  src: url('/fonts/roboto-mono-all-700-normal.woff') format('woff');
+  src: url("/fonts/roboto-mono-all-700-normal.woff") format("woff");
 }
 
 /* Resets based on sindresorhus/modern-normalize and tailwindlabs/tailwindcss */
@@ -41,7 +41,8 @@
 html,
 body {
   color: rgb(24 24 27);
-  font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: "Roboto Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
   line-height: 1.5;
   margin: 0;
   -moz-tab-size: 4;
