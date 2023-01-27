@@ -4,6 +4,9 @@ import useSpring from '../hooks/useSpring';
 import classnames from '../utils/classnames';
 
 import styles from './Player.module.css';
+import convertSecondsToLength from "../utils/convertSecondsToLength";
+
+import soundPlaceholder from './metronome.mp3'
 
 type PlayButtonProps = {
   disabled: boolean;
@@ -56,22 +59,61 @@ const PlayButton = (
   );
 }
 
-const Player = () => {
+const Player = (props: { album: any, cID: number, audio: any;}) => {
   const [ playing, setPlaying ] = useState(false);
+
+  function updateTime() {
+    const timeText = document.getElementById("audioCurrentTime");
+    if(timeText !== null){
+      timeText.innerHTML = convertSecondsToLength(props.audio.currentTime);
+    }
+    const playbar = document.getElementById("playbar");
+    if(playbar !== null){
+      // @ts-ignore
+      playbar.value = (props.audio.currentTime*100).toString();
+    }
+  }
+
+  props.audio.ontimeupdate = function() {updateTime()};
+
+  function playClicked() {
+    setPlaying(prev => !prev)
+    if(playing){
+      props.audio.pause()
+    }
+    else{
+      props.audio.play()
+    }
+  }
+
+  function sliderChange() {
+    const playbar = document.getElementById("playbar");
+    if(playbar !== null){
+      // @ts-ignore
+      props.audio.currentTime = parseFloat(playbar.value)/100
+    }
+  }
 
   return (
     <div class={styles.playerContainer}>
       <PlayButton
-        disabled={false}
+        disabled={props.cID === -1}
         playing={playing}
-        onClick={() => setPlaying(prev => !prev)}
+        onClick={() => playClicked()}
       />
-      <span>0:00</span>
-      <div class={styles.playBarRail}>
-        <div class={styles.playBarFill} style={{ width: '0' }}></div>
-        <div class={styles.playBarThumb}></div>
-      </div>
-      <span>0:00</span>
+      <span id="audioCurrentTime">0:00</span>
+      {props.cID !== -1 && <input type="range" min="0" max={(props.album.tracks[props.cID-1].length*100).toString()} value="0" id="playbar" class={styles.playSlider}
+                                  onInput={sliderChange}/>}
+      {props.cID === -1 && <input type="range" min="0" max="100" value="0" id="playbar" class={styles.playSlider} disabled/>}
+      {/*<div class={styles.playBarRail}>
+        {props.cID !== -1 &&  <div id="barRail" class={styles.playBarFill} style={{ width: (props.audio.currentTime/props.album.tracks[props.cID-1].length*100).toString()+'%' }}></div>}
+        {props.cID === -1 &&  <div class={styles.playBarFill} style={{ width: '0%' }}></div>}
+      <div class={styles.playBarThumb}></div>
+      </div>*/}
+
+
+      {props.cID !== -1 && <span>{convertSecondsToLength(props.album.tracks[props.cID-1].length)}</span>}
+        {props.cID === -1 && <span>0:00</span>}
     </div>
   );
 }

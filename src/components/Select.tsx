@@ -22,10 +22,11 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
   const [ selected, setSelected ] = useState(items[0].key);
   const [ active, setActive ] = useState(items[0].key);
   const [ query, setQuery ] = useState('');
-  const [ ignoreBlur, setIgnoreBlur ] = useState(false);
 
   const arrowRef = useRef<SVGSVGElement>(null);
   const timeoutRef = useRef<number | null>(null);
+  const ignoreBlur = useRef<Boolean>(false);
+
 
   useSpring(expanded, 0.4, 300, 22, s => {
     if (arrowRef.current) {
@@ -42,8 +43,8 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
   }, [])
 
   const onComboBlur = () => {
-    if (ignoreBlur) {
-      setIgnoreBlur(false);
+    if (ignoreBlur.current) {
+      ignoreBlur.current = false;
       return;
     }
 
@@ -190,7 +191,7 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
                 selectOption(item.key);
                 setExpanded(false);
               }}
-              onMouseDown={() => setIgnoreBlur(true)}
+              onMouseDown={() => ignoreBlur.current = true}
             >
               {item.value}
             </li>

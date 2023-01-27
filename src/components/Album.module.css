@@ -1,0 +1,119 @@
+.albumContainer {
+    display: flex;
+    flex-direction: row;
+    border-bottom-width: 1px;
+    width: 100%;
+}
+
+.stackBox {
+    width: 0.6rem;
+    height: 3.5rem;
+    border-right-width: 1px;
+}
+
+.coverBox {
+    border-width: 0 1px 0 0;
+    padding: 0.5rem;
+}
+
+.coverBox > img {
+    border-radius: 0.25rem;
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.artistBox {
+    min-width: 20%;
+    border-width: 0 1px 0 0;
+    margin-top: auto;
+    padding: 1rem;
+    font-weight: bold;
+}
+
+.nameAndGenreBox {
+    display: flex;
+    width: 65%;
+    border-width: 0 1px 0 0;
+}
+
+.nameBox {
+    flex: auto;
+    border-width: 0 1px 0 0;
+    margin-top: auto;
+    padding: 1rem;
+    font-weight: bold;
+    justify-items: center;
+}
+
+.newBox {
+    min-width: 5%;
+    border-width: 0 1px 0 0;
+    margin-top: auto;
+    padding: 1rem;
+    justify-items: center;
+    background-color: #FEFCE8;
+}
+
+.genreBox {
+    min-width: 17%;
+    justify-content: end;
+    justify-items: center;
+    text-align: right;
+    margin-top: auto;
+    padding: 1rem;
+}
+
+.yearBox {
+    min-width: 5%;
+    border-width: 0 1px 0 0;
+    margin-top: auto;
+    padding: 1rem;
+}
+
+.infoBoxOff {
+    width: 3.5rem;
+    border-width: 0 1px 0 0;
+    margin-top: auto;
+    padding: 1rem;
+}
+
+.infoBoxOff:hover {
+    background-color: rgb(228 228 231);
+}
+
+.infoBoxOn {
+    width: 3.5rem;
+    border-width: 0 1px 0 0;
+    margin-top: auto;
+    padding: 1rem;
+    background-color: #18181B;
+}
+
+.infoBoxOn:hover {
+    background-color: rgb(147, 147, 147);
+}
+
+.infoSVG {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+.dropdownBox {
+    width: 3.5rem;
+    margin-top: auto;
+    padding: 1rem;
+}
+
+.dropdownBox:hover {
+    background-color: rgb(228 228 231);
+}
+
+.tracksBox {
+    padding-left: 2.5rem;
+    border-top-width: 1px;
+    flex-direction: column;
+    display: flex;
+    background-color: #FAFAFA;
+}
+
+
