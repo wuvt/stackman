@@ -1,13 +1,13 @@
 .libraryContainer {
-    overflow-y: auto;
-    overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .cardContainer {
-    display: flex;
-    padding: 1.5rem;
-    overflow-y: auto;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    height: 100%;
+  display: flex;
+  padding: 1.5rem;
+  overflow-y: auto;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  height: 100%;
 }

@@ -38,7 +38,7 @@
   border-width: 0 0 0 1px;
   margin-top: auto;
   padding: 1rem;
-  background-color: #FEFCE8;
+  background-color: #fefce8;
 }
 
 .newButtonOff:hover {
@@ -50,7 +50,7 @@
   border-width: 0 0 0 1px;
   margin-top: auto;
   padding: 1rem;
-  background-color: #EAB308;
+  background-color: #eab308;
 }
 
 .newButtonOn:hover {

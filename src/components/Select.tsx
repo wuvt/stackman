@@ -8,27 +8,26 @@ import styles from './Select.module.css';
 type SelectItem = {
   key: string;
   value: string;
-}
+};
 
 type SelectProps = {
   name: string;
   items: SelectItem[];
   label: string;
   onChange?: (key: string) => void;
-}
+};
 
 const Select = ({ name, items, label, onChange }: SelectProps) => {
-  const [ expanded, setExpanded ] = useState(false);
-  const [ selected, setSelected ] = useState(items[0].key);
-  const [ active, setActive ] = useState(items[0].key);
-  const [ query, setQuery ] = useState('');
+  const [expanded, setExpanded] = useState(false);
+  const [selected, setSelected] = useState(items[0].key);
+  const [active, setActive] = useState(items[0].key);
+  const [query, setQuery] = useState('');
 
   const arrowRef = useRef<SVGSVGElement>(null);
   const timeoutRef = useRef<number | null>(null);
   const ignoreBlur = useRef<Boolean>(false);
 
-
-  useSpring(expanded, 0.4, 300, 22, s => {
+  useSpring(expanded, 0.4, 300, 22, (s) => {
     if (arrowRef.current) {
       arrowRef.current.style.transform = `rotate(${s.currentValue * -180}deg)`;
     }
@@ -39,8 +38,8 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-    }
-  }, [])
+    };
+  }, []);
 
   const onComboBlur = () => {
     if (ignoreBlur.current) {
@@ -52,17 +51,17 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
       selectOption(active);
       setExpanded(false);
     }
-  }
+  };
 
   const onComboKeyDown = (e: KeyboardEvent) => {
     const { key, altKey, ctrlKey, metaKey } = e;
     const orderedItems = [
-      ...items.filter(item => item.key === selected),
-      ...items.filter(item => item.key !== selected),
-    ].map(item => item.key);
+      ...items.filter((item) => item.key === selected),
+      ...items.filter((item) => item.key !== selected),
+    ].map((item) => item.key);
 
     if (expanded) {
-      if (key === 'ArrowUp' && altKey || key === 'Enter' || key === ' ') {
+      if ((key === 'ArrowUp' && altKey) || key === 'Enter' || key === ' ') {
         e.preventDefault();
         selectOption(active);
         setExpanded(false);
@@ -70,7 +69,7 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
         e.preventDefault();
         const index = Math.min(
           orderedItems.indexOf(active) + 1,
-          items.length - 1,
+          items.length - 1
         );
         setActive(orderedItems[index]);
       } else if (key === 'ArrowUp') {
@@ -111,7 +110,7 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
       setExpanded(true);
 
       const newQuery = query + key;
-      const match = items.filter(item => {
+      const match = items.filter((item) => {
         return item.value.toLowerCase().indexOf(newQuery.toLowerCase()) === 0;
       })[0];
 
@@ -126,14 +125,14 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
         setQuery('');
       }
     }
-  }
+  };
 
   const selectOption = (key: string) => {
     setSelected(key);
     if (onChange) {
       onChange(key);
     }
-  }
+  };
 
   return (
     <div
@@ -155,7 +154,11 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
         onBlur={onComboBlur}
         onKeyDown={onComboKeyDown}
       >
-        {items.filter(item => item.key == selected).map(item => item.value)[0]}
+        {
+          items
+            .filter((item) => item.key == selected)
+            .map((item) => item.value)[0]
+        }
         <svg
           aria-hidden
           ref={arrowRef}
@@ -175,8 +178,8 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
         tab-index="-1"
       >
         {items
-          .filter(item => item.key !== selected)
-          .map(item => (
+          .filter((item) => item.key !== selected)
+          .map((item) => (
             <li
               aria-selected={item.key == selected}
               class={classnames(styles.selectItem, {
@@ -185,21 +188,20 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
               id={`${name}-listbox-${item.key}`}
               key={item.key}
               role="option"
-              onClick={e => {
+              onClick={(e) => {
                 e.stopPropagation();
                 setActive(item.key);
                 selectOption(item.key);
                 setExpanded(false);
               }}
-              onMouseDown={() => ignoreBlur.current = true}
+              onMouseDown={() => (ignoreBlur.current = true)}
             >
               {item.value}
             </li>
-          ))
-        }
+          ))}
       </ul>
     </div>
   );
-}
+};
 
 export default Select;

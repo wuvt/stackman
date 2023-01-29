@@ -2,8 +2,7 @@ import classnames from '../utils/classnames';
 
 import styles from './Info.module.css';
 
-const Info = (props: { album: any; }) => {
-
+const Info = (props: { album: any }) => {
   return (
     <div id="info" class={styles.infoPanel}>
       {props.album && (
@@ -38,6 +37,6 @@ const Info = (props: { album: any; }) => {
       )}
     </div>
   );
-}
+};
 
 export default Info;

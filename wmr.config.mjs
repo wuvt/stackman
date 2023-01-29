@@ -5,10 +5,10 @@ import { defineConfig } from 'wmr';
 
 const CopyExtraAssets = ({ assets } = { assets: [] }) => {
   return {
-    name: "copy-extra-assets",
+    name: 'copy-extra-assets',
     async generateBundle(_) {
       await Promise.all(
-        assets.map(async asset => {
+        assets.map(async (asset) => {
           this.emitFile({
             type: 'asset',
             fileName: path.join(asset.dest, path.basename(asset.src)),
@@ -17,8 +17,8 @@ const CopyExtraAssets = ({ assets } = { assets: [] }) => {
         })
       );
     },
-  }
-}
+  };
+};
 
 export default defineConfig({
   alias: {
@@ -27,10 +27,10 @@ export default defineConfig({
   },
   plugins: [
     CopyExtraAssets({
-      assets: [ '400', '500', '600', '700' ].map(weight => ({
-       src: `node_modules/@fontsource/roboto-mono/files/roboto-mono-all-${weight}-normal.woff`,
-       dest: 'fonts',
-     }))
+      assets: ['400', '500', '600', '700'].map((weight) => ({
+        src: `node_modules/@fontsource/roboto-mono/files/roboto-mono-all-${weight}-normal.woff`,
+        dest: 'fonts',
+      })),
     }),
   ],
   middleware: [
@@ -42,6 +42,6 @@ export default defineConfig({
       } else {
         next();
       }
-    }
+    },
   ],
 });

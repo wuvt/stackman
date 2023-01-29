@@ -1,24 +1,24 @@
 .albumCardContainer {
-    display: flex;
-    flex-direction: column;
-    margin: 0.5rem;
-    padding: 1rem;
-    width: 12rem;
-    align-items: center;
-    border-radius: 0.25rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem;
+  padding: 1rem;
+  width: 12rem;
+  align-items: center;
+  border-radius: 0.25rem;
 }
 
 .albumCardContainer:hover {
-    box-shadow: 0px 0px 0.25rem 0.25rem gold;
+  box-shadow: 0px 0px 0.25rem 0.25rem gold;
 }
 
 .image {
-    border-radius: 0.25rem;
+  border-radius: 0.25rem;
 }
 
 .title {
-    font-weight: bold;
-    font-size: 1.125rem;
-    line-height: 1.75rem;
-    margin-top: 0.5rem;
+  font-weight: bold;
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+  margin-top: 0.5rem;
 }

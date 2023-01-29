@@ -6,15 +6,17 @@ const useSpring = (
   mass: number,
   stiffness: number,
   damping: number,
-  callback: (s: Spring) => void,
+  callback: (s: Spring) => void
 ) => {
-  const springRef = useRef<Spring>(new Spring({
-    fromValue: value ? 1 : 0,
-    toValue: value ? 1 : 0,
-    mass,
-    stiffness,
-    damping,
-  }));
+  const springRef = useRef<Spring>(
+    new Spring({
+      fromValue: value ? 1 : 0,
+      toValue: value ? 1 : 0,
+      mass,
+      stiffness,
+      damping,
+    })
+  );
 
   useLayoutEffect(() => {
     callback(springRef.current);
@@ -26,6 +28,6 @@ const useSpring = (
   useEffect(() => {
     springRef.current.updateConfig({ toValue: value ? 1 : 0 }).start();
   }, [value]);
-}
+};
 
 export default useSpring;
