@@ -1,4 +1,7 @@
-node_modules/
+result
 
+node_modules/
 .cache
 dist
+
+target/

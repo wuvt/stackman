@@ -22,7 +22,7 @@
       </noscript>
     </div>
 
-    <script type="module">
+    <!-- <script type="module">
       const realFetch = window.fetch;
       window.fetch = async (...args) => {
         const previous = await navigator.serviceWorker.getRegistrations();
@@ -40,7 +40,7 @@
         window.fetch = realFetch;
         return window.fetch(...args);
       }
-    </script>
+    </script> -->
 
     <script type="module">
       import { component, html, invalidate, key, render, useUnmount } from 'https://unpkg.com/1more';
@@ -81,7 +81,7 @@
 
         return ({ album, track, number }) => {
           return html`
-            <li id=${track.id} class="flex border-l divide-x">
+            <li id=${track.uuid} class="flex border-l divide-x">
               <div class="w-10 py-2 text-center">${number}</div>
               ${track ? html`
                 <div class="px-4 py-2 flex-auto min-w-0 flex flex-nowrap">
@@ -104,11 +104,11 @@
                 </button>
                 <button
                   class=${'p-2 font-bold transition duration-75 '
-                    + (getDeck().track && getDeck().track.id === track.id ?
+                    + (getDeck().track && getDeck().track.uuid === track.uuid ?
                       'bg-zinc-900 text-zinc-50 hover:bg-zinc-700' :
                       'hover:bg-zinc-200')}
                   onclick=${() => {
-                    if (getDeck().track && getDeck().track.id === track.id) {
+                    if (getDeck().track && getDeck().track.uuid === track.uuid) {
                       write({ }, state.deck);
                     } else {
                       write({ img: album.img, track }, state.deck);
@@ -141,9 +141,9 @@
         let trackMetadata = undefined;
 
         return album => {
-          const expanded = getExpanded().has(album.id);
+          const expanded = getExpanded().has(album.uuid);
           if (expanded && !trackMetadata) {
-            fetch(`/api/v1/album/${album.id}/tracks`)
+            fetch(`/api/v1/album/${album.uuid}/tracks`)
               .then(res => res.json())
               .then(data => {
                 trackMetadata = data;
@@ -152,7 +152,7 @@
           };
 
           return html`
-            <li id=${album.id}>
+            <li id=${album.uuid}>
               <div class="flex items-stretch divide-x">
                 <div
                   class=${'p-1 ' + (`bg-${stackColors[album.stack]}-400` || 'bg-zinc-300')}
@@ -167,11 +167,11 @@
                 <div class="px-4 flex items-center justify-center basis-20">${album.year}</div>
                 <button
                   class=${'px-4 flex items-center text-lg font-bold transition '
-                    + (getFocus() && getFocus().id === album.id ?
+                    + (getFocus() && getFocus().uuid === album.uuid ?
                       'bg-zinc-900 text-zinc-50 hover:bg-zinc-700' :
                       'hover:bg-zinc-200')}
                   onclick=${() => {
-                    if (getFocus() && getFocus().id === album.id) {
+                    if (getFocus() && getFocus().uuid === album.uuid) {
                       write(undefined, state.focus);
                     } else {
                       write(album, state.focus);
@@ -187,9 +187,9 @@
                   onclick=${() => {
                     let expansions = new Set(getExpanded());
                     if (expanded) {
-                      expansions.delete(album.id);
+                      expansions.delete(album.uuid);
                     } else {
-                      expansions.add(album.id);
+                      expansions.add(album.uuid);
                     }
                     write(expansions, state.expanded);
                   }}
@@ -202,7 +202,7 @@
               ${expanded && html`
                 <ul class="flex flex-col bg-zinc-50 pl-10 border-t divide-y">
                   ${trackMetadata && album.tracks.map((trackId, index) => {
-                    const track = trackMetadata && trackMetadata.find(t => t.id === trackId);
+                    const track = trackMetadata && trackMetadata.find(t => t.uuid === trackId);
                     return key(
                       trackId,
                       StackmanTrack({ album, track, number: index + 1 })
@@ -222,7 +222,7 @@
         return album => {
           return html`
             <div
-              id=${`card_${album.id}`}
+              id=${`card_${album.uuid}`}
               class=${`m-2 p-4 w-48 flex flex-col items-center bg-${stackColors[album.stack]}-200 hover:bg-${stackColors[album.stack]}-300 rounded`}
             >
               <div class="relative mb-2">
@@ -230,7 +230,7 @@
                 <button
                   class="absolute w-full h-full top-0 flex justify-center items-center rounded text-white/0 hover:bg-black/30 hover:text-white transition"
                   onclick=${() => {
-                    if (getFocus() && getFocus().id === album.id) {
+                    if (getFocus() && getFocus().uuid === album.uuid) {
                       write(undefined, state.focus);
                     } else {
                       write(album, state.focus);
@@ -246,14 +246,14 @@
                 class="w-full flex flex-col flex-auto"
                 onclick=${() => {
                   let expansions = new Set(getExpanded());
-                  expansions.add(album.id);
+                  expansions.add(album.uuid);
                   write(expansions, state.expanded);
                   write(false, state.showingNew);
 
                   // why did I do this
                   window.requestAnimationFrame(() => {
                     window.requestAnimationFrame(() => {
-                      document.getElementById(album.id).scrollIntoView();
+                      document.getElementById(album.uuid).scrollIntoView();
                     });
                   });
                 }}
@@ -307,11 +307,11 @@
                   placeholder="Search..."
                   oninput=${e => write(e.target.value, state.query)}
                 ></input>
-                <div class="w-52 p-4 flex items-center justify-between">
-                  Sort by Year
+                <div class="basis-52 p-4 flex items-center justify-between">
+                  Sort by Artist
                   <svg class="w-6 h-6" viewBox="0 0 24 24"><path d="m12 15-5-5h10Z" /></svg>
                 </div>
-                <div class="relative w-64">
+                <div class="relative basis-60">
                   <button
                     class="w-full p-4 flex items-center justify-between transition hover:bg-zinc-100"
                     onclick=${() => {
@@ -371,13 +371,13 @@
                 id="albums"
                 class=${`overflow-y-auto border-y divide-y ${getShowingNew() ? 'hidden' : ''}`}
               >
-                ${albums.map(a => key(a.id, StackmanAlbum({ is_new: getNewAlbums().has(a.id), ...a })))}
+                ${albums.map(a => key(a.uuid, StackmanAlbum({ is_new: getNewAlbums().has(a.uuid), ...a })))}
               </ul>
               <div
                 id="new"
                 class=${`overflow-y-auto h-full border-y flex flex-wrap items-start p-6 ${getShowingNew() ? '' : 'hidden'}`}
               >
-                ${albums.filter(a => getNewAlbums().has(a.id)).map(a => key('card_' + a.id, StackmanAlbumCard(a)))}
+                ${albums.filter(a => getNewAlbums().has(a.uuid)).map(a => key('card_' + a.uuid, StackmanAlbumCard(a)))}
               </div>
             </div>
           `;
@@ -391,7 +391,7 @@
           const album = getFocus();
 
           return html`
-            <div id="info" class="w-[26rem] min-w-[26rem] flex flex-col divide-y">
+            <div id="info" class="w-[26rem] min-w-0 flex flex-col divide-y">
               ${album && html`
                 <div class="text-2xl font-semibold p-4">${album.title}</div>
                 <div class="flex space-x-4 divide-x">
@@ -402,7 +402,7 @@
                   <div class="p-4 mr-4 -ml-4 border-r border-b float-left break-words">
                     <img class="w-28 h-28 rounded" src=${album.img} />
                   </div>
-                  <div class="p-4 py-2 -mx-4 mb-2 w-[16.85rem] border-b inline-block text-right">
+                  <div class="p-4 py-2 -mr-4 ml-32 mb-2 border-b text-right">
                     ${album.genre}
                   </div>
                   ${album.review}
