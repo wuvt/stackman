@@ -65,10 +65,15 @@ fn main() -> Result<()> {
 
     rouille::start_server("0.0.0.0:8000", move |request| {
         router!(request,
+            (GET) ["/api/v1/albums.json"] => {
+                trace!("GET /api/v1/albums.json");
+                Response::from_data("application/json", data.as_str()).with_additional_header("Access-Control-Allow-Origin", "*")
+            },
+
             (GET) ["/api/v1/album/{uuid}", uuid: Uuid] => {
                 trace!("GET /api/v1/album/{}", uuid);
                 if let Some(album) = holdings.get(&uuid) {
-                    Response::json(album)
+                    Response::json(album).with_additional_header("Access-Control-Allow-Origin", "*")
                 } else {
                     trace!("Album not found: {}", uuid);
                     Response::empty_404()
@@ -84,7 +89,7 @@ fn main() -> Result<()> {
                         .map(|track_id| tracks.get(track_id).unwrap())
                         .collect::<Vec<&Track>>();
 
-                    Response::json(&album_tracks)
+                    Response::json(&album_tracks).with_additional_header("Access-Control-Allow-Origin", "*")
                 } else {
                     trace!("Album not found: {}", uuid);
                     Response::empty_404()
@@ -139,7 +144,7 @@ fn main() -> Result<()> {
                     }
                 };
 
-                Response::json(&(&albums[start..limit]))
+                Response::json(&(&albums[start..limit])).with_additional_header("Access-Control-Allow-Origin", "*")
             },
 
             (GET) ["/api/v1/albums/new"] => {
@@ -150,13 +155,13 @@ fn main() -> Result<()> {
                     .map(|album| format!("{}", album.uuid.hyphenated()))
                     .collect::<Vec<String>>();
 
-                Response::json(&new_albums)
+                Response::json(&new_albums).with_additional_header("Access-Control-Allow-Origin", "*")
             },
 
             (GET) ["/api/v1/track/{uuid}", uuid: Uuid] => {
                 trace!("GET /api/v1/track/{}", uuid);
                 if let Some(track) = tracks.get(&uuid) {
-                    Response::json(track)
+                    Response::json(track).with_additional_header("Access-Control-Allow-Origin", "*")
                 } else {
                     trace!("Track not found: {}", uuid);
                     Response::empty_404()
@@ -189,7 +194,7 @@ fn main() -> Result<()> {
                                 buf.put_i16_le(wave.floor() as i16);
                             }
 
-                            return Response::from_data("audio/wave", buf);
+                            return Response::from_data("audio/wave", buf).with_additional_header("Access-Control-Allow-Origin", "*");
                         }
                     }
                 }

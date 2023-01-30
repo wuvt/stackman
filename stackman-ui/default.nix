@@ -6,7 +6,12 @@ buildNpmPackage {
 
   src = ./.;
 
-  npmDepsHash = "sha256-hE2Co9aHo561sM4xQxnvmvQfSKf4l9tJgbji4tKlV/Y=";
+  npmDepsHash = "sha256-WLeU6n3LK5sIZX1MrQFgHACqDRzXNtf8D5ANd50/OY8=";
+
+  installPhase = ''
+    mkdir -p "$out"
+    cp -r dist/* "$out"
+  '';
 
   meta = {
     description = "Web interface for browsing and playing from Stackman";

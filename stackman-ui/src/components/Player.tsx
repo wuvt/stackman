@@ -1,12 +1,11 @@
+import { RefObject } from 'preact';
 import { useRef, useState } from 'preact/hooks';
 
 import useSpring from '../hooks/useSpring';
 import classnames from '../utils/classnames';
-
-import styles from './Player.module.css';
 import convertSecondsToLength from '../utils/convertSecondsToLength';
 
-import soundPlaceholder from './metronome.mp3';
+import styles from './Player.module.css';
 
 type PlayButtonProps = {
   disabled: boolean;
@@ -67,31 +66,47 @@ const PlayButton = ({ disabled, playing, onClick }: PlayButtonProps) => {
   );
 };
 
-const Player = (props: { album: any; cID: number; audio: any }) => {
+const Player = (props: {
+  album: any;
+  cID: number;
+  audio: RefObject<HTMLAudioElement>;
+}) => {
   const [playing, setPlaying] = useState(false);
 
   function updateTime() {
+    if (!props.audio.current) {
+      return;
+    }
+
     const timeText = document.getElementById('audioCurrentTime');
     if (timeText !== null) {
-      timeText.innerHTML = convertSecondsToLength(props.audio.currentTime);
+      timeText.innerHTML = convertSecondsToLength(
+        props.audio.current.currentTime
+      );
     }
     const playbar = document.getElementById('playbar');
     if (playbar !== null) {
       // @ts-ignore
-      playbar.value = (props.audio.currentTime * 100).toString();
+      playbar.value = (props.audio.current.currentTime * 100).toString();
     }
   }
 
-  props.audio.ontimeupdate = function () {
-    updateTime();
-  };
+  if (props.audio.current) {
+    props.audio.current.ontimeupdate = function () {
+      updateTime();
+    };
+  }
 
   function playClicked() {
+    if (!props.audio.current) {
+      return;
+    }
+
     setPlaying((prev) => !prev);
     if (playing) {
-      props.audio.pause();
+      props.audio.current.pause();
     } else {
-      props.audio.play();
+      props.audio.current.play();
     }
   }
 
@@ -99,7 +114,7 @@ const Player = (props: { album: any; cID: number; audio: any }) => {
     const playbar = document.getElementById('playbar');
     if (playbar !== null) {
       // @ts-ignore
-      props.audio.currentTime = parseFloat(playbar.value) / 100;
+      props.audio.current.currentTime = parseFloat(playbar.value) / 100;
     }
   }
 

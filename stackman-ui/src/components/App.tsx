@@ -1,22 +1,18 @@
+import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
+
 import Info from './Info';
 import Library from './Library';
 import NowPlaying from './NowPlaying';
 import Player from './Player';
 import Select from './Select';
 
-import a from './albums.json';
-
 import styles from './App.module.css';
-import { useCallback, useState } from 'preact/hooks';
-import soundPlaceholder from './metronome.mp3';
 
 const stacks = [
   { key: 'ALL', value: 'All Categories' },
   { key: 'RCK', value: 'Rock/Pop' },
   { key: 'RPM', value: 'Electronic' },
 ];
-
-const albums = a;
 
 const FilterBar = (props: { newOn: boolean; handleToggleNew: Function }) => {
   return (
@@ -44,26 +40,58 @@ const FilterBar = (props: { newOn: boolean; handleToggleNew: Function }) => {
 };
 
 const App = () => {
+  const [albums, setAlbums] = useState<any[] | null>(null);
   const [newOn, setNewOn] = useState(false);
   const [currentUUID, setCurrentUUID] = useState('0');
   const [playingUUID, setPlayingUUID] = useState('0');
   const [currentID, setCurrentID] = useState(-1);
 
+  const audio = useRef<HTMLAudioElement>(new Audio());
+
+  useEffect(() => {
+    fetch('http://localhost:8000/api/v1/albums.json')
+      .then((res) => res.json())
+      .then((albums) => setAlbums(albums))
+      .catch((e) => console.error('Error fetching albums: ', e));
+  }, []);
+
   const handleShowInfo = useCallback((uuid: string) => {
     setCurrentUUID((prevUUID) => (prevUUID === uuid ? '0' : uuid));
   }, []);
 
-  const handlePlay = useCallback((uuid: string, id: number) => {
-    setCurrentID((prevID) => (prevID === id ? -1 : id));
-    setPlayingUUID(uuid);
-    console.log(uuid, id);
-  }, []);
+  const handlePlay = useCallback(
+    (uuid: string, id: number) => {
+      const loadAudio = async (album_uuid: string, track_index: number) => {
+        const res = await fetch(
+          `http://localhost:8000/api/v1/album/${album_uuid}/tracks`
+        );
+        const tracks = await res.json();
+        const track_audio = await fetch(
+          `http://localhost:8000${tracks[track_index - 1].audio}`
+        );
+        const blob = await track_audio.blob();
+
+        audio.current = new Audio(URL.createObjectURL(blob));
+      };
+
+      if (albums && currentID !== id) {
+        loadAudio(uuid, id);
+      }
+
+      setCurrentID((prevID) => (prevID === id ? -1 : id));
+      setPlayingUUID(uuid);
+      console.log(uuid, id);
+    },
+    [albums]
+  );
 
   const handleToggleNew = useCallback(() => {
     setNewOn((prevOn) => !prevOn);
   }, []);
 
-  const audio = new Audio(soundPlaceholder);
+  if (!albums) {
+    return null;
+  }
 
   return (
     <div class={styles.mainContainer}>

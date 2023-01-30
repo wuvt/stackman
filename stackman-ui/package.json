@@ -17,6 +17,7 @@
     "wobble": "^1.5.1"
   },
   "devDependencies": {
+    "htm": "^3.1.1",
     "prettier": "^2.8.3",
     "typescript": "^4.9.4",
     "wmr": "^3.8.0"
