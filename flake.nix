@@ -30,7 +30,7 @@
 
             config = {
               Cmd = [
-                "${pkgs.stackman-api}/bin/stackman-api-demo"
+                "${pkgs.stackman-api-demo}/bin/stackman-api-demo"
                 "-s" "${pkgs.stackman-ui-prototype}"
                 "-a" "/data/albums.json"
               ];
