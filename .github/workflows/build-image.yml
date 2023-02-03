@@ -1,0 +1,42 @@
+name: Create and publish a Docker image
+
+on: [push]
+
+jobs:
+  build-and-push-image:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v18
+
+      - name: Build Docker image
+        run: nix build .#stackman-container
+
+      - name: Generate tags
+        id: meta
+        uses: docker/metadata-action@v4
+        with:
+          images: ghcr.io/wuvt/stackman
+          sep-tags: " "
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+
+      - name: Login to GitHub Container Registry
+        run: skopeo login -u "${{ github.actor }}" -p "${{ secrets.GITHUB_TOKEN }}" ghcr.io
+
+      - name: Push Docker image
+        run: |
+          for TAG in ${{ steps.meta.outputs.tags }}
+          do
+            skopeo copy docker-archive:result "docker://$TAG"
+          done
