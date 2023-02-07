@@ -3,7 +3,7 @@ import { useRef, useState } from 'preact/hooks';
 
 import useSpring from '../hooks/useSpring';
 import classnames from '../utils/classnames';
-import convertSecondsToLength from '../utils/convertSecondsToLength';
+import renderTime from '../utils/renderTime';
 
 import styles from './Player.module.css';
 
@@ -80,9 +80,7 @@ const Player = (props: {
 
     const timeText = document.getElementById('audioCurrentTime');
     if (timeText !== null) {
-      timeText.innerHTML = convertSecondsToLength(
-        props.audio.current.currentTime
-      );
+      timeText.innerHTML = renderTime(props.audio.current.currentTime);
     }
     const playbar = document.getElementById('playbar');
     if (playbar !== null) {
@@ -155,9 +153,7 @@ const Player = (props: {
       </div>*/}
 
       {props.cID !== -1 && (
-        <span>
-          {convertSecondsToLength(props.album.tracks[props.cID - 1].length)}
-        </span>
+        <span>{renderTime(props.album.tracks[props.cID - 1].length)}</span>
       )}
       {props.cID === -1 && <span>0:00</span>}
     </div>
