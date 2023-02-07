@@ -32,6 +32,7 @@ jobs:
 
   push-image:
     name: Publish the Docker image to GitHub
+    if: github.ref != 'refs/heads/staging' && github.ref != 'refs/heads/trying'
     needs: build-image
     runs-on: ubuntu-latest
     steps:
