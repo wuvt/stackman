@@ -71,13 +71,14 @@ const App = () => {
         );
         const blob = await track_audio.blob();
 
-        audio.current = new Audio(URL.createObjectURL(blob));
+        audio.current.src = URL.createObjectURL(blob);
       };
 
       if (albums && currentID !== id) {
         loadAudio(uuid, id);
       }
 
+      audio.current.src = null;
       setCurrentID((prevID) => (prevID === id ? -1 : id));
       setPlayingUUID(uuid);
       console.log(uuid, id);

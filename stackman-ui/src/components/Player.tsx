@@ -1,5 +1,5 @@
 import { RefObject } from 'preact';
-import { useRef, useState } from 'preact/hooks';
+import { useEffect, useRef, useState } from 'preact/hooks';
 
 import useSpring from '../hooks/useSpring';
 import classnames from '../utils/classnames';
@@ -71,91 +71,67 @@ const Player = (props: {
   cID: number;
   audio: RefObject<HTMLAudioElement>;
 }) => {
+  const [currentTime, setCurrentTime] = useState(0);
   const [playing, setPlaying] = useState(false);
 
-  function updateTime() {
-    if (!props.audio.current) {
-      return;
-    }
-
-    const timeText = document.getElementById('audioCurrentTime');
-    if (timeText !== null) {
-      timeText.innerHTML = renderTime(props.audio.current.currentTime);
-    }
-    const playbar = document.getElementById('playbar');
-    if (playbar !== null) {
-      // @ts-ignore
-      playbar.value = (props.audio.current.currentTime * 100).toString();
-    }
-  }
-
-  if (props.audio.current) {
-    props.audio.current.ontimeupdate = function () {
-      updateTime();
+  useEffect(() => {
+    const updateTime = (e: Event) => {
+      setCurrentTime((e.target as HTMLAudioElement).currentTime);
     };
-  }
 
-  function playClicked() {
+    if (props.audio.current) {
+      props.audio.current.ontimeupdate = updateTime;
+      props.audio.current.onchange = updateTime;
+      props.audio.current.onloadstart = () => setCurrentTime(0);
+    }
+  });
+
+  useEffect(() => {
     if (!props.audio.current) {
       return;
     }
 
-    setPlaying((prev) => !prev);
     if (playing) {
-      props.audio.current.pause();
-    } else {
       props.audio.current.play();
+    } else {
+      props.audio.current.pause();
     }
-  }
-
-  function sliderChange() {
-    const playbar = document.getElementById('playbar');
-    if (playbar !== null) {
-      // @ts-ignore
-      props.audio.current.currentTime = parseFloat(playbar.value) / 100;
-    }
-  }
+  }, [playing]);
 
   return (
     <div class={styles.playerContainer}>
       <PlayButton
         disabled={props.cID === -1}
         playing={playing}
-        onClick={() => playClicked()}
+        onClick={() => setPlaying((prev) => !prev)}
       />
-      <span id="audioCurrentTime">0:00</span>
-      {props.cID !== -1 && (
-        <input
-          type="range"
-          min="0"
-          max={(props.album.tracks[props.cID - 1].length * 100).toString()}
-          value="0"
-          id="playbar"
-          class={styles.playSlider}
-          onInput={sliderChange}
-        />
-      )}
-      {props.cID === -1 && (
-        <input
-          type="range"
-          min="0"
-          max="100"
-          value="0"
-          id="playbar"
-          class={styles.playSlider}
-          disabled
-        />
-      )}
+      <span>{renderTime(currentTime)}</span>
+      <input
+        type="range"
+        min="0"
+        max={props.cID !== -1 ? props.album.tracks[props.cID - 1].length : 1}
+        value={currentTime}
+        id="playbar"
+        disabled={props.cID === -1}
+        class={styles.playSlider}
+        onChange={(e) => {
+          if (props.audio.current) {
+            props.audio.current.currentTime = parseFloat(
+              (e.target as HTMLInputElement).value
+            );
+          }
+        }}
+      />
       {/*<div class={styles.playBarRail}>
         {props.cID !== -1 &&  <div id="barRail" class={styles.playBarFill} style={{ width: (props.audio.currentTime/props.album.tracks[props.cID-1].length*100).toString()+'%' }}></div>}
         {props.cID === -1 &&  <div class={styles.playBarFill} style={{ width: '0%' }}></div>}
       <div class={styles.playBarThumb}></div>
       </div>*/}
-
-      {props.cID !== -1 && (
-        <span>{renderTime(props.album.tracks[props.cID - 1].length)}</span>
-      )}
-      {props.cID === -1 && <span>0:00</span>}
+      <span>
+        {renderTime(
+          props.cID !== -1 ? props.album.tracks[props.cID - 1].length : 0
+        )}
+      </span>
     </div>
   );
 };
