@@ -1,4 +1,3 @@
-import { RefObject } from 'preact';
 import { useEffect, useRef, useState } from 'preact/hooks';
 
 import useSpring from '../hooks/useSpring';
@@ -66,35 +65,59 @@ const PlayButton = ({ disabled, playing, onClick }: PlayButtonProps) => {
   );
 };
 
-const Player = (props: {
-  album: any;
-  cID: number;
-  audio: RefObject<HTMLAudioElement>;
-}) => {
+const loadAudio = async (
+  album_uuid: string,
+  track_index: number,
+  signal: AbortSignal
+) => {
+  const res = await fetch(
+    `http://localhost:8000/api/v1/album/${album_uuid}/tracks`,
+    { signal }
+  );
+  const tracks = await res.json();
+  const track_audio = await fetch(
+    `http://localhost:8000${tracks[track_index - 1].audio}`,
+    { signal }
+  );
+
+  return await track_audio.blob();
+};
+
+const Player = (props: { album: any; cID: number }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [playing, setPlaying] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  const audio = useRef(new Audio());
 
   useEffect(() => {
-    const updateTime = (e: Event) => {
-      setCurrentTime((e.target as HTMLAudioElement).currentTime);
-    };
-
-    if (props.audio.current) {
-      props.audio.current.ontimeupdate = updateTime;
-      props.audio.current.onchange = updateTime;
-      props.audio.current.onloadstart = () => setCurrentTime(0);
-    }
-  });
+    audio.current.addEventListener('timeupdate', (e) => {
+      setCurrentTime((e.currentTarget as HTMLAudioElement).currentTime);
+    });
+    audio.current.addEventListener('loadstart', () => setCurrentTime(0));
+  }, []);
 
   useEffect(() => {
-    if (!props.audio.current) {
-      return;
-    }
+    setPlaying(false);
+    setLoaded(false);
+    audio.current.src = '';
 
+    const controller = new AbortController();
+    loadAudio(props.album.uuid, props.cID, controller.signal)
+      .then((blob) => {
+        audio.current.src = URL.createObjectURL(blob);
+        setLoaded(true);
+      })
+      .catch((err) => console.log(`Download error: ${err.message}`));
+
+    return () => controller.abort();
+  }, [props]);
+
+  useEffect(() => {
     if (playing) {
-      props.audio.current.play();
+      audio.current.play();
     } else {
-      props.audio.current.pause();
+      audio.current.pause();
     }
   }, [playing]);
 
@@ -111,15 +134,12 @@ const Player = (props: {
         min="0"
         max={props.cID !== -1 ? props.album.tracks[props.cID - 1].length : 1}
         value={currentTime}
-        id="playbar"
-        disabled={props.cID === -1}
+        disabled={!loaded}
         class={styles.playSlider}
         onChange={(e) => {
-          if (props.audio.current) {
-            props.audio.current.currentTime = parseFloat(
-              (e.target as HTMLInputElement).value
-            );
-          }
+          audio.current.currentTime = parseFloat(
+            (e.currentTarget as HTMLInputElement).value
+          );
         }}
       />
       {/*<div class={styles.playBarRail}>

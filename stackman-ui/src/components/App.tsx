@@ -46,8 +46,6 @@ const App = () => {
   const [playingUUID, setPlayingUUID] = useState('0');
   const [currentID, setCurrentID] = useState(-1);
 
-  const audio = useRef<HTMLAudioElement>(new Audio());
-
   useEffect(() => {
     fetch('http://localhost:8000/api/v1/albums.json')
       .then((res) => res.json())
@@ -59,32 +57,11 @@ const App = () => {
     setCurrentUUID((prevUUID) => (prevUUID === uuid ? '0' : uuid));
   }, []);
 
-  const handlePlay = useCallback(
-    (uuid: string, id: number) => {
-      const loadAudio = async (album_uuid: string, track_index: number) => {
-        const res = await fetch(
-          `http://localhost:8000/api/v1/album/${album_uuid}/tracks`
-        );
-        const tracks = await res.json();
-        const track_audio = await fetch(
-          `http://localhost:8000${tracks[track_index - 1].audio}`
-        );
-        const blob = await track_audio.blob();
-
-        audio.current.src = URL.createObjectURL(blob);
-      };
-
-      if (albums && currentID !== id) {
-        loadAudio(uuid, id);
-      }
-
-      audio.current.src = null;
-      setCurrentID((prevID) => (prevID === id ? -1 : id));
-      setPlayingUUID(uuid);
-      console.log(uuid, id);
-    },
-    [albums]
-  );
+  const handlePlay = useCallback((uuid: string, id: number) => {
+    setCurrentID((prevID) => (prevID === id ? -1 : id));
+    setPlayingUUID(uuid);
+    console.log(uuid, id);
+  }, []);
 
   const handleToggleNew = useCallback(() => {
     setNewOn((prevOn) => !prevOn);
@@ -127,7 +104,6 @@ const App = () => {
           cID={currentID}
         />
         <Player
-          audio={audio}
           album={
             albums.filter((album) => {
               return album.uuid === playingUUID;
