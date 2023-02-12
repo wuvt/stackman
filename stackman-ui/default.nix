@@ -6,7 +6,7 @@ buildNpmPackage {
 
   src = ./.;
 
-  npmDepsHash = "sha256-WLeU6n3LK5sIZX1MrQFgHACqDRzXNtf8D5ANd50/OY8=";
+  npmDepsHash = "sha256-PwYJgBHrze+n9vBRs/EFGQLyQrfoOmL/51k4H2W1ZIo=";
 
   installPhase = ''
     mkdir -p "$out"

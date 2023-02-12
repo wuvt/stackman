@@ -37,6 +37,7 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
     };
   }, []);
@@ -116,11 +117,12 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
+        timeoutRef.current = null;
       }
       if (match) {
         setActive(match.key);
         setQuery(query + key);
-        timeoutRef.current = setTimeout(() => setQuery(''), 500);
+        timeoutRef.current = window.setTimeout(() => setQuery(''), 500);
       } else {
         setQuery('');
       }

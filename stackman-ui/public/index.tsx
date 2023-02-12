@@ -1,6 +1,6 @@
 if (process.env.NODE_ENV === 'development') {
   // @ts-ignore
-  import("preact/debug");
+  import('preact/debug');
 }
 
 import { render } from 'preact';
