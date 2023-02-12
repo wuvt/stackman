@@ -21,6 +21,12 @@ jobs:
       - name: Install Nix
         uses: cachix/install-nix-action@v18
 
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v11
+        with:
+          name: wuvt
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
       - name: Build Docker image
         run: nix build .#stackman-container
 
