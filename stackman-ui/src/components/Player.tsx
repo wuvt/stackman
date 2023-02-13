@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 
+import { Album } from '../api';
 import useSpring from '../hooks/useSpring';
 import classnames from '../utils/classnames';
 import renderTime from '../utils/renderTime';
@@ -83,7 +84,7 @@ const loadAudio = async (
   return await track_audio.blob();
 };
 
-const Player = (props: { album: any; cID: number }) => {
+const Player = (props: { album: Album; cID: number }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [loaded, setLoaded] = useState(false);

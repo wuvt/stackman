@@ -1,9 +1,11 @@
+import { Album, Uuid } from '../api';
+
 import styles from './AlbumCard.module.css';
 
 const AlbumCard = (props: {
-  album: any;
-  cUUID: string;
-  handleShowInfo: Function;
+  album: Album;
+  cUUID: Uuid<Album> | null;
+  handleShowInfo: (a: Uuid<Album>) => void;
 }) => {
   const stackColors: { [key: string]: string } = {
     RCK: '#F87171',

@@ -1,8 +1,9 @@
+import { Album } from '../api';
 import classnames from '../utils/classnames';
 
 import styles from './Info.module.css';
 
-const Info = (props: { album: any }) => {
+const Info = (props: { album: Album }) => {
   return (
     <div id="info" class={styles.infoPanel}>
       {props.album && (

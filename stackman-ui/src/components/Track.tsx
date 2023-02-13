@@ -1,14 +1,15 @@
+import { Album as AlbumType, Track as TrackType, Uuid } from '../api';
 import renderTime from '../utils/renderTime';
 
 import styles from './Track.module.css';
 
 const Track = (props: {
-  album: any;
-  track: any;
+  album: AlbumType;
+  track: TrackType;
   index: number;
-  playingUUID: string;
+  playingUUID: Uuid<AlbumType> | null;
   cID: number;
-  handlePlay: Function;
+  handlePlay: (a: Uuid<AlbumType>, t: number) => void;
 }) => {
   return (
     <div class={styles.trackContainer}>

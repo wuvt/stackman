@@ -1,6 +1,8 @@
+import { Album } from '../api';
+
 import styles from './NowPlaying.module.css';
 
-const NowPlaying = (props: { album: any; cID: number }) => {
+const NowPlaying = (props: { album: Album; cID: number }) => {
   return (
     <div class={styles.nowPlayingContainer}>
       <div class={styles.albumArt}>

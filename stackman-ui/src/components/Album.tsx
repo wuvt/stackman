@@ -1,15 +1,18 @@
-import styles from './Album.module.css';
 import { useRef, useState } from 'preact/hooks';
+
 import Track from './Track';
+import { Album as AlbumType, Track as TrackType, Uuid } from '../api';
 import useSpring from '../hooks/useSpring';
 
+import styles from './Album.module.css';
+
 const Album = (props: {
-  album: any;
-  cUUID: string;
-  playingUUID: string;
+  album: AlbumType;
+  cUUID: Uuid<AlbumType> | null;
+  playingUUID: Uuid<AlbumType> | null;
   cID: number;
-  handleShowInfo: Function;
-  handlePlay: Function;
+  handleShowInfo: (a: Uuid<AlbumType>) => void;
+  handlePlay: (a: Uuid<AlbumType>, t: number) => void;
 }) => {
   const stackColors: { [key: string]: string } = {
     RCK: '#F87171',
@@ -66,7 +69,7 @@ const Album = (props: {
         <button
           id="dropdown"
           ref={dButtonRef}
-          onClick={() => setDropdownOn((prevState: any) => !prevState)}
+          onClick={() => setDropdownOn((prev) => !prev)}
           className={styles.dropdownBox}
         >
           <svg viewBox="0 0 24 24">
@@ -79,7 +82,7 @@ const Album = (props: {
       </div>
       {dropdownOn && (
         <div class={styles.tracksBox}>
-          {props.album.tracks.map((track: any, index: number) => {
+          {props.album.tracks.map((track: TrackType, index: number) => {
             return (
               <Track
                 album={props.album}
