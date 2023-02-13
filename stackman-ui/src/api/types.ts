@@ -3,16 +3,16 @@ export type Uuid<T> = string & { __uuid_type: T };
 export enum Collection {
   Americana = 'AMC',
   Classical = 'CLS',
-  EasyListening = 'ELG',
   Electronic = 'RPM',
   HipHop = 'HIP',
   Jazz = 'JZZ',
   Metal = 'MTL',
   Ncp = 'NCP',
   NcpJazz = 'NCJ',
+  NewAge = 'NGE',
   Novelty = 'NOV',
   Rock = 'RCK',
-  Soul = 'SFK',
+  SoulFunk = 'SFK',
   Soundtrack = 'SND',
 }
 
