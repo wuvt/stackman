@@ -11,8 +11,28 @@ permissions:
   packages: write
 
 jobs:
+  check:
+    name: Run all tests and checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v18
+
+      - name: Setup Cachix
+        uses: cachix/cachix-action@v11
+        with:
+          name: wuvt
+          authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
+
+      - name: Evaluate Nix checks
+        run: nix flake check
+
   build-image:
     name: Build the Docker image
+    needs: check
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
