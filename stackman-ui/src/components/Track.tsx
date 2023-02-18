@@ -1,5 +1,6 @@
+import renderTime from '../utils/renderTime';
+
 import styles from './Track.module.css';
-import convertSecondsToLength from '../utils/convertSecondsToLength';
 
 const Track = (props: {
   album: any;
@@ -28,9 +29,7 @@ const Track = (props: {
       {props.album.artist !== props.track.artist && (
         <div class={styles.trackArtistBox}>{props.track.artist}</div>
       )}
-      <div class={styles.trackLengthBox}>
-        {convertSecondsToLength(props.track.length)}
-      </div>
+      <div class={styles.trackLengthBox}>{renderTime(props.track.length)}</div>
       <button class={styles.trackmanBox}>Send To Trackman</button>
       <button
         class={
