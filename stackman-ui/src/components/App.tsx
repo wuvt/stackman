@@ -5,6 +5,7 @@ import Library from './Library';
 import NowPlaying from './NowPlaying';
 import Player from './Player';
 import Select from './Select';
+import { Album, Uuid } from '../api';
 
 import styles from './App.module.css';
 
@@ -14,7 +15,7 @@ const stacks = [
   { key: 'RPM', value: 'Electronic' },
 ];
 
-const FilterBar = (props: { newOn: boolean; handleToggleNew: Function }) => {
+const FilterBar = (props: { newOn: boolean; handleToggleNew: () => void }) => {
   return (
     <div class={styles.filterBar}>
       <input
@@ -40,10 +41,10 @@ const FilterBar = (props: { newOn: boolean; handleToggleNew: Function }) => {
 };
 
 const App = () => {
-  const [albums, setAlbums] = useState<any[] | null>(null);
+  const [albums, setAlbums] = useState<Album[] | null>(null);
   const [newOn, setNewOn] = useState(false);
-  const [currentUUID, setCurrentUUID] = useState('0');
-  const [playingUUID, setPlayingUUID] = useState('0');
+  const [currentUUID, setCurrentUUID] = useState<Uuid<Album> | null>(null);
+  const [playingUUID, setPlayingUUID] = useState<Uuid<Album> | null>(null);
   const [currentID, setCurrentID] = useState(-1);
 
   useEffect(() => {
@@ -53,11 +54,11 @@ const App = () => {
       .catch((e) => console.error('Error fetching albums: ', e));
   }, []);
 
-  const handleShowInfo = useCallback((uuid: string) => {
-    setCurrentUUID((prevUUID) => (prevUUID === uuid ? '0' : uuid));
+  const handleShowInfo = useCallback((uuid: Uuid<Album>) => {
+    setCurrentUUID((prevUUID) => (prevUUID === uuid ? null : uuid));
   }, []);
 
-  const handlePlay = useCallback((uuid: string, id: number) => {
+  const handlePlay = useCallback((uuid: Uuid<Album>, id: number) => {
     setCurrentID((prevID) => (prevID === id ? -1 : id));
     setPlayingUUID(uuid);
     console.log(uuid, id);
@@ -70,6 +71,13 @@ const App = () => {
   if (!albums) {
     return null;
   }
+
+  const currentAlbum = albums.filter((album) => {
+    return album.uuid === currentUUID;
+  })[0];
+  const playingAlbum = albums.filter((album) => {
+    return album.uuid === playingUUID;
+  })[0];
 
   return (
     <div class={styles.mainContainer}>
@@ -86,31 +94,11 @@ const App = () => {
             cID={currentID}
           />
         </div>
-        <Info
-          album={
-            albums.filter((album) => {
-              return album.uuid === currentUUID;
-            })[0]
-          }
-        />
+        <Info album={currentAlbum} />
       </div>
       <div class={styles.playbackContainer}>
-        <NowPlaying
-          album={
-            albums.filter((album) => {
-              return album.uuid === playingUUID;
-            })[0]
-          }
-          cID={currentID}
-        />
-        <Player
-          album={
-            albums.filter((album) => {
-              return album.uuid === playingUUID;
-            })[0]
-          }
-          cID={currentID}
-        />
+        <NowPlaying album={playingAlbum} cID={currentID} />
+        <Player album={playingAlbum} cID={currentID} />
       </div>
     </div>
   );
