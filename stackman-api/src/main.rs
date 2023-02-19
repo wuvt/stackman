@@ -65,13 +65,8 @@ fn main() -> Result<()> {
 
     rouille::start_server("0.0.0.0:8000", move |request| {
         router!(request,
-            (GET) ["/api/v1/albums.json"] => {
-                trace!("GET /api/v1/albums.json");
-                Response::from_data("application/json", data.as_str()).with_additional_header("Access-Control-Allow-Origin", "*")
-            },
-
-            (GET) ["/api/v1/album/{uuid}", uuid: Uuid] => {
-                trace!("GET /api/v1/album/{}", uuid);
+            (GET) ["/api/v1/albums/{uuid}", uuid: Uuid] => {
+                trace!("GET /api/v1/albums/{}", uuid);
                 if let Some(album) = holdings.get(&uuid) {
                     Response::json(album).with_additional_header("Access-Control-Allow-Origin", "*")
                 } else {
@@ -80,8 +75,8 @@ fn main() -> Result<()> {
                 }
             },
 
-            (GET) ["/api/v1/album/{uuid}/tracks", uuid: Uuid] => {
-                trace!("GET /api/v1/album/{}/tracks", uuid);
+            (GET) ["/api/v1/albums/{uuid}/tracks", uuid: Uuid] => {
+                trace!("GET /api/v1/albums/{}/tracks", uuid);
                 if let Some(album) = holdings.get(&uuid) {
                     let album_tracks = album
                         .tracks
@@ -158,8 +153,8 @@ fn main() -> Result<()> {
                 Response::json(&new_albums).with_additional_header("Access-Control-Allow-Origin", "*")
             },
 
-            (GET) ["/api/v1/track/{uuid}", uuid: Uuid] => {
-                trace!("GET /api/v1/track/{}", uuid);
+            (GET) ["/api/v1/tracks/{uuid}", uuid: Uuid] => {
+                trace!("GET /api/v1/tracks/{}", uuid);
                 if let Some(track) = tracks.get(&uuid) {
                     Response::json(track).with_additional_header("Access-Control-Allow-Origin", "*")
                 } else {
@@ -168,8 +163,8 @@ fn main() -> Result<()> {
                 }
             },
 
-            (GET) ["/media/songs/{file}", file: String] => {
-                trace!("GET /media/songs/{}", file);
+            (GET) ["/media/{file}", file: String] => {
+                trace!("GET /media/{}", file);
                 if let Some(target) = file.strip_suffix(".wav") {
                     trace!("Extracted file name: {}", target);
                     if let Ok(uuid) = Uuid::try_parse(target) {
@@ -282,7 +277,7 @@ fn parse_data(data: &str) -> Result<(BTreeMap<Uuid, Album>, BTreeMap<Uuid, Track
                     album: album.uuid,
                     length: track.length,
                     is_fcc: track.is_fcc,
-                    audio: format!("/media/songs/{}.wav", uuid.hyphenated()),
+                    audio: format!("/media/{}.wav", uuid.hyphenated()),
                 },
             );
         }
