@@ -16,7 +16,7 @@ export enum Collection {
   Soundtrack = 'SND',
 }
 
-export interface Album {
+export type Album = {
   uuid: Uuid<Album>;
   artist: string;
   title: string;
@@ -24,16 +24,25 @@ export interface Album {
   genre: string;
   collection: Collection;
   img: string;
-  tracks: Track[];
+};
+
+export type AlbumInfo = Album & {
+  tracks: Uuid<Track>[];
   label: string;
   review: string;
   highlights: string;
-}
+};
 
-export interface Track {
-  id: number;
+export type Track = {
+  uuid: Uuid<Track>;
+  disk_number: string;
   artist: string;
   title: string;
   length: number;
   is_fcc: boolean;
-}
+};
+
+export type TrackInfo = Track & {
+  album: Album;
+  audio: string;
+};

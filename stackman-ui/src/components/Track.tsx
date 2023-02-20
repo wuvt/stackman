@@ -1,4 +1,4 @@
-import { Album as AlbumType, Track as TrackType, Uuid } from '../api';
+import { Album as AlbumType, Track as TrackType, Uuid, useTrack } from '../api';
 import renderTime from '../utils/renderTime';
 
 import styles from './Track.module.css';
@@ -6,14 +6,12 @@ import styles from './Track.module.css';
 const Track = (props: {
   album: AlbumType;
   track: TrackType;
-  index: number;
-  playingUUID: Uuid<AlbumType> | null;
-  cID: number;
-  handlePlay: (a: Uuid<AlbumType>, t: number) => void;
+  playing: boolean;
+  handlePlay: (t: Uuid<TrackType>) => void;
 }) => {
   return (
     <div class={styles.trackContainer}>
-      <div class={styles.trackNumBox}>{props.track.id}</div>
+      <div class={styles.trackNumBox}>{props.track.disk_number}</div>
       <div class={styles.trackTitleBox}>
         {props.track.title}
         {props.track.is_fcc && (
@@ -33,22 +31,12 @@ const Track = (props: {
       <div class={styles.trackLengthBox}>{renderTime(props.track.length)}</div>
       <button class={styles.trackmanBox}>Send To Trackman</button>
       <button
-        class={
-          props.album.uuid === props.playingUUID &&
-          props.cID === props.index + 1
-            ? styles.playBoxOn
-            : styles.playBoxOff
-        }
-        onClick={() => props.handlePlay(props.album.uuid, props.track.id)}
+        class={props.playing ? styles.playBoxOn : styles.playBoxOff}
+        onClick={() => props.handlePlay(props.track.uuid)}
       >
         <svg class={styles.playButton} viewBox="0 0 20 20">
           <path
-            fill={
-              props.album.uuid === props.playingUUID &&
-              props.cID === props.index + 1
-                ? 'white'
-                : 'black'
-            }
+            fill={props.playing ? 'white' : 'black'}
             d="M6.833 15.583V4.375l8.792 5.604Z"
           />
         </svg>

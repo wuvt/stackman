@@ -1,23 +1,28 @@
-import { Album } from '../api';
+import { Track, Uuid, useTrack } from '../api';
 
 import styles from './NowPlaying.module.css';
 
-const NowPlaying = (props: { album: Album; cID: number }) => {
+const NowPlaying = (props: { track: Uuid<Track> | undefined }) => {
+  const track = useTrack(props.track);
+
   return (
     <div class={styles.nowPlayingContainer}>
       <div class={styles.albumArt}>
-        {props.cID === -1 && <div class={styles.albumArtBlank}></div>}
-        {props.cID !== -1 && <img src={props.album.img} />}
+        {track.data ? (
+          <img src={track.data.album.img} />
+        ) : (
+          <div class={styles.albumArtBlank}></div>
+        )}
       </div>
       <div class={styles.nowPlayingInfo}>
         <div class={styles.nowPlayingTitle}>
-          {props.cID === -1
-            ? 'No Track Selected'
-            : props.album.tracks[props.cID - 1].title}
+          {props.track
+            ? track.data
+              ? track.data.title
+              : 'Loading...'
+            : 'No Track Selected'}
         </div>
-        <div class={styles.nowPlayingArtist}>
-          {props.cID === -1 ? '' : props.album.artist}
-        </div>
+        <div class={styles.nowPlayingArtist}>{track.data?.artist ?? ''}</div>
       </div>
     </div>
   );
