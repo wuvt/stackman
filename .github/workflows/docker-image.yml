@@ -22,7 +22,7 @@ jobs:
         uses: cachix/install-nix-action@v18
 
       - name: Setup Cachix
-        uses: cachix/cachix-action@v11
+        uses: cachix/cachix-action@v12
         with:
           name: wuvt
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -42,7 +42,7 @@ jobs:
         uses: cachix/install-nix-action@v18
 
       - name: Setup Cachix
-        uses: cachix/cachix-action@v11
+        uses: cachix/cachix-action@v12
         with:
           name: wuvt
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'

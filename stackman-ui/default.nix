@@ -6,7 +6,7 @@ let
 
   src = ./.;
 
-  npmDepsHash = "sha256-PwYJgBHrze+n9vBRs/EFGQLyQrfoOmL/51k4H2W1ZIo=";
+  npmDepsHash = "sha256-zEGhXIXT6Kt1NQGxjdJk1B1zapSDkWZCcMjo+8Bx8hI=";
 
   meta = {
     description = "Web interface for browsing and playing from Stackman";
