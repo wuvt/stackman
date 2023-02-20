@@ -13,14 +13,14 @@
   },
   "dependencies": {
     "@fontsource/roboto-mono": "^4.5.10",
-    "preact": "^10.11.3",
+    "preact": "^10.12.1",
     "wobble": "^1.5.1"
   },
   "devDependencies": {
-    "@types/node": "^18.13.0",
+    "@types/node": "^18.14.0",
     "htm": "^3.1.1",
-    "prettier": "^2.8.3",
-    "typescript": "^4.9.4",
+    "prettier": "^2.8.4",
+    "typescript": "^4.9.5",
     "wmr": "^3.8.0"
   },
   "private": true
