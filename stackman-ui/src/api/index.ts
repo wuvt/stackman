@@ -48,10 +48,22 @@ export const useTrack = (id?: Uuid<Track>) => {
   return useQuery<TrackInfo>(id ? `v1/tracks/${id}` : undefined);
 };
 
-export const useAlbums = (showNew?: boolean) => {
+export type UseAlbumProps = {
+  collection?: Collection;
+  showNew?: boolean;
+  search?: string;
+};
+
+export const useAlbums = (props?: UseAlbumProps) => {
   let params = new URLSearchParams();
-  if (showNew) {
+  if (props?.collection) {
+    params.append('collection', props.collection);
+  }
+  if (props?.showNew) {
     params.append('new', 'true');
+  }
+  if (props?.search) {
+    params.append('search', props.search);
   }
   return useQuery<Album[]>(`v1/albums?${params.toString()}`);
 };

@@ -5,7 +5,7 @@ import Library from './Library';
 import NowPlaying from './NowPlaying';
 import Player from './Player';
 import Select from './Select';
-import { Album, Track, Uuid, useAlbums } from '../api';
+import { Album, Collection, Track, Uuid, useAlbums } from '../api';
 
 import styles from './App.module.css';
 
@@ -15,15 +15,33 @@ const stacks = [
   { key: 'RPM', value: 'Electronic' },
 ];
 
-const FilterBar = (props: { newOn: boolean; handleToggleNew: () => void }) => {
+const FilterBar = (props: {
+  newOn: boolean;
+  handleCollectionChange: (c?: Collection) => void;
+  handleToggleNew: () => void;
+  handleQueryChange: (q: string) => void;
+}) => {
+  const handleInput = (e: Event) => {
+    props.handleQueryChange((e.currentTarget as HTMLInputElement).value);
+  };
+  const handleSelect = (s: string) => {
+    props.handleCollectionChange(s === 'ALL' ? undefined : (s as Collection));
+  };
+
   return (
     <div class={styles.filterBar}>
       <input
         aria-label="Search"
         class={styles.search}
         placeholder="Search..."
+        onInput={handleInput}
       ></input>
-      <Select name="stacks" label="Current stack" items={stacks}></Select>
+      <Select
+        name="stacks"
+        label="Current stack"
+        items={stacks}
+        onChange={handleSelect}
+      />
       <button
         id="newButton"
         class={props.newOn ? styles.newButtonOn : styles.newButtonOff}
@@ -44,6 +62,8 @@ const App = () => {
   const [newOn, setNewOn] = useState(false);
   const [currentUUID, setCurrentUUID] = useState<Uuid<Album> | null>(null);
   const [playingTrack, setPlayingTrack] = useState<Uuid<Track> | undefined>();
+  const [collection, setCollection] = useState<Collection | undefined>();
+  const [query, setQuery] = useState<string>('');
 
   const handleShowInfo = useCallback((uuid: Uuid<Album>) => {
     setCurrentUUID((prevUUID) => (prevUUID === uuid ? null : uuid));
@@ -60,9 +80,16 @@ const App = () => {
     <div class={styles.mainContainer}>
       <div class={styles.exploreContainer}>
         <div id="library" class={styles.libraryContainer}>
-          <FilterBar newOn={newOn} handleToggleNew={handleToggleNew} />
+          <FilterBar
+            newOn={newOn}
+            handleCollectionChange={setCollection}
+            handleToggleNew={handleToggleNew}
+            handleQueryChange={setQuery}
+          />
           <Library
             cUUID={currentUUID}
+            collection={collection}
+            query={query}
             handleShowInfo={handleShowInfo}
             handlePlay={handlePlay}
             newOn={newOn}
