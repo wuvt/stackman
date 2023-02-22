@@ -1,24 +1,50 @@
 import { useRef, useState } from 'preact/hooks';
 
 import Track from './Track';
-import { Album as AlbumType, Track as TrackType, Uuid } from '../api';
+import {
+  Album as AlbumType,
+  CollectionColors,
+  Track as TrackType,
+  Uuid,
+  useAlbumTracks,
+} from '../api';
 import useSpring from '../hooks/useSpring';
 
 import styles from './Album.module.css';
 
+type TrackListProps = {
+  album: AlbumType;
+  playingTrack?: Uuid<TrackType>;
+  handlePlay: (t: Uuid<TrackType>) => void;
+};
+
+const TrackList = ({ album, playingTrack, handlePlay }: TrackListProps) => {
+  const tracks = useAlbumTracks(album.uuid);
+
+  return (
+    <div class={styles.tracksBox}>
+      {tracks.data?.map((track) => {
+        return (
+          <Track
+            track={track}
+            key={track.uuid}
+            album={album}
+            playing={playingTrack === track.uuid}
+            handlePlay={handlePlay}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
 const Album = (props: {
   album: AlbumType;
   cUUID: Uuid<AlbumType> | null;
-  playingUUID: Uuid<AlbumType> | null;
-  cID: number;
+  playingTrack?: Uuid<TrackType>;
   handleShowInfo: (a: Uuid<AlbumType>) => void;
-  handlePlay: (a: Uuid<AlbumType>, t: number) => void;
+  handlePlay: (t: Uuid<TrackType>) => void;
 }) => {
-  const stackColors: { [key: string]: string } = {
-    RCK: '#F87171',
-    RPM: '#2DD4BF',
-  };
-
   const [dropdownOn, setDropdownOn] = useState(false);
 
   const dButtonRef = useRef<HTMLButtonElement>(null);
@@ -37,7 +63,7 @@ const Album = (props: {
         <div
           class={styles.stackBox}
           style={{
-            backgroundColor: stackColors[props.album.collection] || 'gray',
+            backgroundColor: CollectionColors[props.album.collection] || 'gray',
           }}
         ></div>
         <div class={styles.coverBox}>
@@ -81,20 +107,11 @@ const Album = (props: {
         </button>
       </div>
       {dropdownOn && (
-        <div class={styles.tracksBox}>
-          {props.album.tracks.map((track: TrackType, index: number) => {
-            return (
-              <Track
-                album={props.album}
-                track={track}
-                index={index}
-                handlePlay={props.handlePlay}
-                playingUUID={props.playingUUID}
-                cID={props.cID}
-              ></Track>
-            );
-          })}
-        </div>
+        <TrackList
+          album={props.album}
+          playingTrack={props.playingTrack}
+          handlePlay={props.handlePlay}
+        />
       )}
     </div>
   );

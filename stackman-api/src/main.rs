@@ -9,7 +9,7 @@ use clap::Parser;
 use regex::RegexBuilder;
 use rouille::{extension_to_mime, router, Request, Response};
 use serde::{Deserialize, Serialize};
-use serde_json::from_str;
+use serde_json::{from_str, json, Value};
 use tracing::trace;
 use uuid::Uuid;
 
@@ -21,7 +21,7 @@ struct Album {
     genre: String,
     year: u32,
     img: String,
-    stack: String,
+    collection: String,
     label: String,
     tracks: Vec<Uuid>,
     review: String,
@@ -31,6 +31,7 @@ struct Album {
 #[derive(Serialize, Debug)]
 struct Track {
     uuid: Uuid,
+    disk_number: String,
     artist: String,
     title: String,
     album: Uuid,
@@ -65,13 +66,8 @@ fn main() -> Result<()> {
 
     rouille::start_server("0.0.0.0:8000", move |request| {
         router!(request,
-            (GET) ["/api/v1/albums.json"] => {
-                trace!("GET /api/v1/albums.json");
-                Response::from_data("application/json", data.as_str()).with_additional_header("Access-Control-Allow-Origin", "*")
-            },
-
-            (GET) ["/api/v1/album/{uuid}", uuid: Uuid] => {
-                trace!("GET /api/v1/album/{}", uuid);
+            (GET) ["/api/v1/albums/{uuid}", uuid: Uuid] => {
+                trace!("GET /api/v1/albums/{}", uuid);
                 if let Some(album) = holdings.get(&uuid) {
                     Response::json(album).with_additional_header("Access-Control-Allow-Origin", "*")
                 } else {
@@ -80,14 +76,24 @@ fn main() -> Result<()> {
                 }
             },
 
-            (GET) ["/api/v1/album/{uuid}/tracks", uuid: Uuid] => {
-                trace!("GET /api/v1/album/{}/tracks", uuid);
+            (GET) ["/api/v1/albums/{uuid}/tracks", uuid: Uuid] => {
+                trace!("GET /api/v1/albums/{}/tracks", uuid);
                 if let Some(album) = holdings.get(&uuid) {
                     let album_tracks = album
                         .tracks
                         .iter()
-                        .map(|track_id| tracks.get(track_id).unwrap())
-                        .collect::<Vec<&Track>>();
+                        .map(|track_id| {
+                            let track = tracks.get(track_id).unwrap();
+                            json!({
+                                "uuid": track.uuid,
+                                "disk_number": track.disk_number,
+                                "artist": track.artist,
+                                "title": track.title,
+                                "length": track.length,
+                                "is_fcc": track.is_fcc,
+                            })
+                        })
+                        .collect::<Vec<Value>>();
 
                     Response::json(&album_tracks).with_additional_header("Access-Control-Allow-Origin", "*")
                 } else {
@@ -101,8 +107,15 @@ fn main() -> Result<()> {
                 let mut albums = holdings
                     .values()
                     .filter(|album| {
-                        if let Some(stack) = request.get_param("stack") {
-                            album.stack == stack
+                        if let Some(collection) = request.get_param("collection") {
+                            album.collection == collection
+                        } else {
+                            true
+                        }
+                    })
+                    .filter(|album| {
+                        if let Some(new) = request.get_param("new") {
+                            new != "true" || album.year == 2022
                         } else {
                             true
                         }
@@ -126,8 +139,21 @@ fn main() -> Result<()> {
                             true
                         }
                     })
-                    .collect::<Vec<&Album>>();
-                albums.sort_by_key(|album| album.artist.clone());
+                    .map(|album| {
+                        json!({
+                            "uuid": album.uuid,
+                            "artist": album.artist,
+                            "title": album.title,
+                            "genre": album.genre,
+                            "year": album.year,
+                            "img": album.img,
+                            "collection": album.collection,
+                        })
+                    })
+                    .collect::<Vec<Value>>();
+                albums.sort_by_key(|album| {
+                    album.get("artist").unwrap().as_str().unwrap().to_string()
+                });
 
                 let start = {
                     if let Some(start) = request.get_param("start") {
@@ -147,29 +173,38 @@ fn main() -> Result<()> {
                 Response::json(&(&albums[start..limit])).with_additional_header("Access-Control-Allow-Origin", "*")
             },
 
-            (GET) ["/api/v1/albums/new"] => {
-                trace!("GET /api/v1/albums/new");
-                let new_albums = holdings
-                    .values()
-                    .filter(|album| album.year == 2022)
-                    .map(|album| format!("{}", album.uuid.hyphenated()))
-                    .collect::<Vec<String>>();
-
-                Response::json(&new_albums).with_additional_header("Access-Control-Allow-Origin", "*")
-            },
-
-            (GET) ["/api/v1/track/{uuid}", uuid: Uuid] => {
-                trace!("GET /api/v1/track/{}", uuid);
+            (GET) ["/api/v1/tracks/{uuid}", uuid: Uuid] => {
+                trace!("GET /api/v1/tracks/{}", uuid);
                 if let Some(track) = tracks.get(&uuid) {
-                    Response::json(track).with_additional_header("Access-Control-Allow-Origin", "*")
+                    let album = holdings.get(&track.album).unwrap();
+                    let album_info = json!({
+                        "uuid": album.uuid,
+                        "artist": album.artist,
+                        "title": album.title,
+                        "genre": album.genre,
+                        "year": album.year,
+                        "img": album.img,
+                        "collection": album.collection,
+                    });
+                    let track_info = json!({
+                        "uuid": track.uuid,
+                        "disk_number": track.disk_number,
+                        "artist": track.artist,
+                        "title": track.title,
+                        "album": album_info,
+                        "length": track.length,
+                        "is_fcc": track.is_fcc,
+                        "audio": track.audio,
+                    });
+                    Response::json(&track_info).with_additional_header("Access-Control-Allow-Origin", "*")
                 } else {
                     trace!("Track not found: {}", uuid);
                     Response::empty_404()
                 }
             },
 
-            (GET) ["/media/songs/{file}", file: String] => {
-                trace!("GET /media/songs/{}", file);
+            (GET) ["/media/{file}", file: String] => {
+                trace!("GET /media/{}", file);
                 if let Some(target) = file.strip_suffix(".wav") {
                     trace!("Extracted file name: {}", target);
                     if let Ok(uuid) = Uuid::try_parse(target) {
@@ -277,12 +312,13 @@ fn parse_data(data: &str) -> Result<(BTreeMap<Uuid, Album>, BTreeMap<Uuid, Track
                 uuid,
                 Track {
                     uuid,
+                    disk_number: format!("{:02}", track.id),
                     artist: track.artist,
                     title: track.title,
                     album: album.uuid,
                     length: track.length,
                     is_fcc: track.is_fcc,
-                    audio: format!("/media/songs/{}.wav", uuid.hyphenated()),
+                    audio: format!("/media/{}.wav", uuid.hyphenated()),
                 },
             );
         }
@@ -296,7 +332,7 @@ fn parse_data(data: &str) -> Result<(BTreeMap<Uuid, Album>, BTreeMap<Uuid, Track
                 genre: album.genre,
                 year: album.year,
                 img: album.img,
-                stack: album.collection,
+                collection: album.collection,
                 label: album.label,
                 tracks: track_ids,
                 review: album.review,

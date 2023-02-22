@@ -5,25 +5,49 @@ import Library from './Library';
 import NowPlaying from './NowPlaying';
 import Player from './Player';
 import Select from './Select';
-import { Album, Uuid } from '../api';
+import {
+  Album,
+  Collection,
+  CollectionNames,
+  Track,
+  Uuid,
+  useAlbums,
+} from '../api';
 
 import styles from './App.module.css';
 
-const stacks = [
-  { key: 'ALL', value: 'All Categories' },
-  { key: 'RCK', value: 'Rock/Pop' },
-  { key: 'RPM', value: 'Electronic' },
-];
+const FilterBar = (props: {
+  newOn: boolean;
+  handleCollectionChange: (c?: Collection) => void;
+  handleToggleNew: () => void;
+  handleQueryChange: (q: string) => void;
+}) => {
+  const items = [
+    { key: 'ALL', value: 'All Categories' },
+    ...Object.entries(CollectionNames).map(([key, value]) => ({ key, value })),
+  ];
 
-const FilterBar = (props: { newOn: boolean; handleToggleNew: () => void }) => {
+  const handleInput = (e: Event) => {
+    props.handleQueryChange((e.currentTarget as HTMLInputElement).value);
+  };
+  const handleSelect = (s: string) => {
+    props.handleCollectionChange(s === 'ALL' ? undefined : (s as Collection));
+  };
+
   return (
     <div class={styles.filterBar}>
       <input
         aria-label="Search"
         class={styles.search}
         placeholder="Search..."
+        onInput={handleInput}
       ></input>
-      <Select name="stacks" label="Current stack" items={stacks}></Select>
+      <Select
+        name="stacks"
+        label="Current stack"
+        items={items}
+        onChange={handleSelect}
+      />
       <button
         id="newButton"
         class={props.newOn ? styles.newButtonOn : styles.newButtonOff}
@@ -41,64 +65,48 @@ const FilterBar = (props: { newOn: boolean; handleToggleNew: () => void }) => {
 };
 
 const App = () => {
-  const [albums, setAlbums] = useState<Album[] | null>(null);
   const [newOn, setNewOn] = useState(false);
   const [currentUUID, setCurrentUUID] = useState<Uuid<Album> | null>(null);
-  const [playingUUID, setPlayingUUID] = useState<Uuid<Album> | null>(null);
-  const [currentID, setCurrentID] = useState(-1);
-
-  useEffect(() => {
-    fetch('http://localhost:8000/api/v1/albums.json')
-      .then((res) => res.json())
-      .then((albums) => setAlbums(albums))
-      .catch((e) => console.error('Error fetching albums: ', e));
-  }, []);
+  const [playingTrack, setPlayingTrack] = useState<Uuid<Track> | undefined>();
+  const [collection, setCollection] = useState<Collection | undefined>();
+  const [query, setQuery] = useState<string>('');
 
   const handleShowInfo = useCallback((uuid: Uuid<Album>) => {
     setCurrentUUID((prevUUID) => (prevUUID === uuid ? null : uuid));
   }, []);
-
-  const handlePlay = useCallback((uuid: Uuid<Album>, id: number) => {
-    setCurrentID((prevID) => (prevID === id ? -1 : id));
-    setPlayingUUID(uuid);
-    console.log(uuid, id);
+  const handlePlay = useCallback((track: Uuid<Track>) => {
+    setPlayingTrack((prev) => (prev === track ? undefined : track));
   }, []);
 
   const handleToggleNew = useCallback(() => {
     setNewOn((prevOn) => !prevOn);
   }, []);
 
-  if (!albums) {
-    return null;
-  }
-
-  const currentAlbum = albums.filter((album) => {
-    return album.uuid === currentUUID;
-  })[0];
-  const playingAlbum = albums.filter((album) => {
-    return album.uuid === playingUUID;
-  })[0];
-
   return (
     <div class={styles.mainContainer}>
       <div class={styles.exploreContainer}>
         <div id="library" class={styles.libraryContainer}>
-          <FilterBar newOn={newOn} handleToggleNew={handleToggleNew} />
+          <FilterBar
+            newOn={newOn}
+            handleCollectionChange={setCollection}
+            handleToggleNew={handleToggleNew}
+            handleQueryChange={setQuery}
+          />
           <Library
-            albums={albums}
             cUUID={currentUUID}
+            collection={collection}
+            query={query}
             handleShowInfo={handleShowInfo}
             handlePlay={handlePlay}
             newOn={newOn}
-            playingUUID={playingUUID}
-            cID={currentID}
+            playingTrack={playingTrack}
           />
         </div>
-        <Info album={currentAlbum} />
+        <Info album={currentUUID ?? undefined} />
       </div>
       <div class={styles.playbackContainer}>
-        <NowPlaying album={playingAlbum} cID={currentID} />
-        <Player album={playingAlbum} cID={currentID} />
+        <NowPlaying track={playingTrack} />
+        <Player track={playingTrack} />
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks';
 
-import { Album } from '../api';
+import { Track, Uuid, useTrack } from '../api';
 import useSpring from '../hooks/useSpring';
 import classnames from '../utils/classnames';
 import renderTime from '../utils/renderTime';
@@ -66,30 +66,13 @@ const PlayButton = ({ disabled, playing, onClick }: PlayButtonProps) => {
   );
 };
 
-const loadAudio = async (
-  album_uuid: string,
-  track_index: number,
-  signal: AbortSignal
-) => {
-  const res = await fetch(
-    `http://localhost:8000/api/v1/album/${album_uuid}/tracks`,
-    { signal }
-  );
-  const tracks = await res.json();
-  const track_audio = await fetch(
-    `http://localhost:8000${tracks[track_index - 1].audio}`,
-    { signal }
-  );
-
-  return await track_audio.blob();
-};
-
-const Player = (props: { album: Album; cID: number }) => {
+const Player = (props: { track?: Uuid<Track> }) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [loaded, setLoaded] = useState(false);
 
   const audio = useRef(new Audio());
+  const track = useTrack(props.track);
 
   useEffect(() => {
     audio.current.addEventListener('timeupdate', (e) => {
@@ -103,16 +86,21 @@ const Player = (props: { album: Album; cID: number }) => {
     setLoaded(false);
     audio.current.src = '';
 
-    const controller = new AbortController();
-    loadAudio(props.album.uuid, props.cID, controller.signal)
-      .then((blob) => {
-        audio.current.src = URL.createObjectURL(blob);
-        setLoaded(true);
+    if (track.data) {
+      const controller = new AbortController();
+      fetch(`http://localhost:8000${track.data.audio}`, {
+        signal: controller.signal,
       })
-      .catch((err) => console.log(`Download error: ${err.message}`));
+        .then((res) => res.blob())
+        .then((blob) => {
+          audio.current.src = URL.createObjectURL(blob);
+          setLoaded(true);
+        })
+        .catch((e) => console.log(`Download error: ${e.message}`));
 
-    return () => controller.abort();
-  }, [props]);
+      return () => controller.abort();
+    }
+  }, [track]);
 
   useEffect(() => {
     if (playing) {
@@ -125,7 +113,7 @@ const Player = (props: { album: Album; cID: number }) => {
   return (
     <div class={styles.playerContainer}>
       <PlayButton
-        disabled={props.cID === -1}
+        disabled={!loaded}
         playing={playing}
         onClick={() => setPlaying((prev) => !prev)}
       />
@@ -133,7 +121,7 @@ const Player = (props: { album: Album; cID: number }) => {
       <input
         type="range"
         min="0"
-        max={props.cID !== -1 ? props.album.tracks[props.cID - 1].length : 1}
+        max={track.data?.length ?? 1}
         value={currentTime}
         disabled={!loaded}
         class={styles.playSlider}
@@ -148,11 +136,7 @@ const Player = (props: { album: Album; cID: number }) => {
         {props.cID === -1 &&  <div class={styles.playBarFill} style={{ width: '0%' }}></div>}
       <div class={styles.playBarThumb}></div>
       </div>*/}
-      <span>
-        {renderTime(
-          props.cID !== -1 ? props.album.tracks[props.cID - 1].length : 0
-        )}
-      </span>
+      <span>{renderTime(track.data?.length ?? 0)}</span>
     </div>
   );
 };

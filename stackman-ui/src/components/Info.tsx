@@ -1,37 +1,39 @@
-import { Album } from '../api';
+import { Album, Uuid, useAlbum } from '../api';
 import classnames from '../utils/classnames';
 
 import styles from './Info.module.css';
 
-const Info = (props: { album: Album }) => {
+const Info = (props: { album?: Uuid<Album> }) => {
+  const album = useAlbum(props.album);
+
   return (
     <div id="info" class={styles.infoPanel}>
-      {props.album && (
+      {album.data && (
         <>
-          <div class={styles.title}>{props.album.title}</div>
+          <div class={styles.title}>{album.data.title}</div>
           <div class={styles.infoHeader}>
             <div class={classnames(styles.artist, styles.textBox)}>
-              {props.album.artist}
+              {album.data.artist}
             </div>
             <div class={classnames(styles.year, styles.textBox)}>
-              {props.album.year}
+              {album.data.year}
             </div>
           </div>
           <div class={styles.infoReview}>
             <div class={styles.albumArt}>
-              <img src={props.album.img} />
+              <img src={album.data.img} />
             </div>
             <div class={classnames(styles.genre, styles.textBox)}>
-              {props.album.genre}
+              {album.data.genre}
             </div>
-            {props.album.review}
+            {album.data.review}
           </div>
           <div class={styles.infoFooter}>
             <div class={classnames(styles.highlights, styles.textBox)}>
-              Favs: {props.album.highlights}
+              Favs: {album.data.highlights}
             </div>
             <div class={classnames(styles.label, styles.textBox)}>
-              (P) {props.album.label}
+              (P) {album.data.label}
             </div>
           </div>
         </>
