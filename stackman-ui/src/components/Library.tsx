@@ -4,42 +4,51 @@ import { Album as AlbumType, Collection, Track, Uuid, useAlbums } from '../api';
 
 import styles from './Library.module.css';
 
-const Library = (props: {
-  cUUID: Uuid<AlbumType> | null;
+export type LibraryProps = {
+  currentAlbum?: Uuid<AlbumType>;
   playingTrack?: Uuid<Track>;
   collection?: Collection;
+  showNew: boolean;
   query: string;
   handleShowInfo: (a: Uuid<AlbumType>) => void;
   handlePlay: (t: Uuid<Track>) => void;
-  newOn: boolean;
-}) => {
+};
+
+const Library = ({
+  currentAlbum,
+  playingTrack,
+  collection,
+  showNew,
+  query,
+  handleShowInfo,
+  handlePlay,
+}: LibraryProps) => {
   const albums = useAlbums({
-    collection: props.collection,
-    showNew: props.newOn,
-    search: props.query,
+    collection,
+    showNew,
+    search: query,
   });
 
   return (
     <div class={styles.libraryContainer}>
-      {!props.newOn &&
-        albums.data?.map((album) => {
-          return (
-            <Album
-              album={album}
-              cUUID={props.cUUID}
-              handleShowInfo={props.handleShowInfo}
-              handlePlay={props.handlePlay}
-              playingTrack={props.playingTrack}
-            />
-          );
-        })}
-      {props.newOn && (
+      {!showNew ? (
+        albums.data?.map((album) => (
+          <Album
+            album={album}
+            key={album.uuid}
+            showing={currentAlbum === album.uuid}
+            playingTrack={playingTrack}
+            handleShowInfo={handleShowInfo}
+            handlePlay={handlePlay}
+          />
+        ))
+      ) : (
         <div className={styles.cardContainer}>
           {albums.data?.map((album) => (
             <AlbumCard
               album={album}
-              cUUID={props.cUUID}
-              handleShowInfo={props.handleShowInfo}
+              key={album.uuid}
+              handleShowInfo={handleShowInfo}
             />
           ))}
         </div>

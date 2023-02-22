@@ -2,25 +2,20 @@ import { Album, CollectionColors, Uuid } from '../api';
 
 import styles from './AlbumCard.module.css';
 
-const AlbumCard = (props: {
+export type AlbumCardProps = {
   album: Album;
-  cUUID: Uuid<Album> | null;
   handleShowInfo: (a: Uuid<Album>) => void;
-}) => {
+};
+
+const AlbumCard = ({ album, handleShowInfo }: AlbumCardProps) => {
   return (
     <div
-      style={{
-        backgroundColor: CollectionColors[props.album.collection] || 'gray',
-      }}
+      style={{ backgroundColor: CollectionColors[album.collection] ?? 'gray' }}
       class={styles.albumCardContainer}
     >
-      <img
-        className={styles.image}
-        src={props.album.img}
-        alt={props.album.title}
-      />
-      <div className={styles.title}>{props.album.title}</div>
-      <div>{props.album.artist}</div>
+      <img className={styles.image} src={album.img} alt={album.title} />
+      <div className={styles.title}>{album.title}</div>
+      <div>{album.artist}</div>
     </div>
   );
 };
