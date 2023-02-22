@@ -2,7 +2,11 @@ import { Track, Uuid, useTrack } from '../api';
 
 import styles from './NowPlaying.module.css';
 
-const NowPlaying = (props: { track: Uuid<Track> | undefined }) => {
+export type NowPlayingProps = {
+  track?: Uuid<Track>;
+};
+
+const NowPlaying = (props: NowPlayingProps) => {
   const track = useTrack(props.track);
 
   return (

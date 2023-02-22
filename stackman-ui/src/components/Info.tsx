@@ -3,7 +3,11 @@ import classnames from '../utils/classnames';
 
 import styles from './Info.module.css';
 
-const Info = (props: { album?: Uuid<Album> }) => {
+export type InfoProps = {
+  album?: Uuid<Album>;
+};
+
+const Info = (props: InfoProps) => {
   const album = useAlbum(props.album);
 
   return (

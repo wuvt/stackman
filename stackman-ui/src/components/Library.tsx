@@ -4,7 +4,7 @@ import { Album as AlbumType, Collection, Track, Uuid, useAlbums } from '../api';
 
 import styles from './Library.module.css';
 
-const Library = (props: {
+export type LibraryProps = {
   cUUID: Uuid<AlbumType> | null;
   playingTrack?: Uuid<Track>;
   collection?: Collection;
@@ -12,34 +12,44 @@ const Library = (props: {
   handleShowInfo: (a: Uuid<AlbumType>) => void;
   handlePlay: (t: Uuid<Track>) => void;
   newOn: boolean;
-}) => {
+};
+
+const Library = ({
+  cUUID,
+  playingTrack,
+  collection,
+  query,
+  handleShowInfo,
+  handlePlay,
+  newOn,
+}: LibraryProps) => {
   const albums = useAlbums({
-    collection: props.collection,
-    showNew: props.newOn,
-    search: props.query,
+    collection: collection,
+    showNew: newOn,
+    search: query,
   });
 
   return (
     <div class={styles.libraryContainer}>
-      {!props.newOn &&
+      {!newOn &&
         albums.data?.map((album) => {
           return (
             <Album
               album={album}
-              cUUID={props.cUUID}
-              handleShowInfo={props.handleShowInfo}
-              handlePlay={props.handlePlay}
-              playingTrack={props.playingTrack}
+              cUUID={cUUID}
+              handleShowInfo={handleShowInfo}
+              handlePlay={handlePlay}
+              playingTrack={playingTrack}
             />
           );
         })}
-      {props.newOn && (
+      {newOn && (
         <div className={styles.cardContainer}>
           {albums.data?.map((album) => (
             <AlbumCard
               album={album}
-              cUUID={props.cUUID}
-              handleShowInfo={props.handleShowInfo}
+              cUUID={cUUID}
+              handleShowInfo={handleShowInfo}
             />
           ))}
         </div>

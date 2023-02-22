@@ -66,7 +66,11 @@ const PlayButton = ({ disabled, playing, onClick }: PlayButtonProps) => {
   );
 };
 
-const Player = (props: { track?: Uuid<Track> }) => {
+export type PlayerProps = {
+  track?: Uuid<Track>;
+};
+
+const Player = (props: PlayerProps) => {
   const [currentTime, setCurrentTime] = useState(0);
   const [playing, setPlaying] = useState(false);
   const [loaded, setLoaded] = useState(false);
