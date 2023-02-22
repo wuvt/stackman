@@ -5,15 +5,16 @@ import Library from './Library';
 import NowPlaying from './NowPlaying';
 import Player from './Player';
 import Select from './Select';
-import { Album, Collection, Track, Uuid, useAlbums } from '../api';
+import {
+  Album,
+  Collection,
+  CollectionNames,
+  Track,
+  Uuid,
+  useAlbums,
+} from '../api';
 
 import styles from './App.module.css';
-
-const stacks = [
-  { key: 'ALL', value: 'All Categories' },
-  { key: 'RCK', value: 'Rock/Pop' },
-  { key: 'RPM', value: 'Electronic' },
-];
 
 const FilterBar = (props: {
   newOn: boolean;
@@ -21,6 +22,11 @@ const FilterBar = (props: {
   handleToggleNew: () => void;
   handleQueryChange: (q: string) => void;
 }) => {
+  const items = [
+    { key: 'ALL', value: 'All Categories' },
+    ...Object.entries(CollectionNames).map(([key, value]) => ({ key, value })),
+  ];
+
   const handleInput = (e: Event) => {
     props.handleQueryChange((e.currentTarget as HTMLInputElement).value);
   };
@@ -39,7 +45,7 @@ const FilterBar = (props: {
       <Select
         name="stacks"
         label="Current stack"
-        items={stacks}
+        items={items}
         onChange={handleSelect}
       />
       <button

@@ -3,6 +3,7 @@ import { useRef, useState } from 'preact/hooks';
 import Track from './Track';
 import {
   Album as AlbumType,
+  CollectionColors,
   Track as TrackType,
   Uuid,
   useAlbumTracks,
@@ -44,11 +45,6 @@ const Album = (props: {
   handleShowInfo: (a: Uuid<AlbumType>) => void;
   handlePlay: (t: Uuid<TrackType>) => void;
 }) => {
-  const stackColors: { [key: string]: string } = {
-    RCK: '#F87171',
-    RPM: '#2DD4BF',
-  };
-
   const [dropdownOn, setDropdownOn] = useState(false);
 
   const dButtonRef = useRef<HTMLButtonElement>(null);
@@ -67,7 +63,7 @@ const Album = (props: {
         <div
           class={styles.stackBox}
           style={{
-            backgroundColor: stackColors[props.album.collection] || 'gray',
+            backgroundColor: CollectionColors[props.album.collection] || 'gray',
           }}
         ></div>
         <div class={styles.coverBox}>
