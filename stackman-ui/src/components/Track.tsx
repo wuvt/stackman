@@ -1,11 +1,11 @@
-import { Album as AlbumType, Track as TrackType, Uuid, useTrack } from '../api';
+import { Album, Track as TrackType, Uuid, useTrack } from '../api';
 import renderTime from '../utils/renderTime';
 
 import styles from './Track.module.css';
 
 export type TrackProps = {
-  album: AlbumType;
   track: TrackType;
+  album: Album;
   playing: boolean;
   handlePlay: (t: Uuid<TrackType>) => void;
 };
