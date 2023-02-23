@@ -31,7 +31,6 @@
             config = {
               Cmd = [
                 "${pkgs.stackman-api-demo}/bin/stackman-api-demo"
-                "-s" "${pkgs.stackman-ui-prototype}"
                 "-a" "/data/albums.json"
               ];
               User = "stackman";
