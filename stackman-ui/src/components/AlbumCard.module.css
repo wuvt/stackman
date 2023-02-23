@@ -6,14 +6,49 @@
   width: 12rem;
   align-items: center;
   border-radius: 0.25rem;
+  z-index: 1;
+}
+
+.accOverlay {
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.59);
+  display: block;
+  position: absolute;
+  border-radius: 0.25rem;
+  width: 12rem;
+  height: 16rem;
+  margin-top: -1rem;
 }
 
 .albumCardContainer:hover {
-  box-shadow: 0px 0px 0.25rem 0.25rem gold;
+  cursor: pointer;
+}
+
+.albumCardContainer:hover .accOverlay {
+  display: none;
+}
+
+.coverContainer {
+  z-index: 3;
+}
+
+.coverContainer:hover span.coverOverlay {
+  display: block;
 }
 
 .image {
   border-radius: 0.25rem;
+}
+
+.coverOverlay {
+  transition: 0.5s ease;
+  border-radius: 0.25rem;
+  background: rgba(0, 0, 0, 0.4);
+  display: none;
+  height: 10rem;
+  width: 10rem;
+  position: absolute;
+  margin-top: -10rem;
 }
 
 .title {
@@ -21,4 +56,8 @@
   font-size: 1.125rem;
   line-height: 1.75rem;
   margin-top: 0.5rem;
+}
+
+.accText {
+  z-index: 3;
 }
