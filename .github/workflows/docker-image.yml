@@ -2,10 +2,11 @@ name: Create and publish a Docker image
 
 on:
   push:
-    branches: [master, staging, trying]
+    branches: [master]
     tags: '*'
   pull_request:
     branches: [master]
+  merge_group:
 
 permissions:
   contents: read
@@ -17,13 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@v25
 
       - name: Setup Cachix
-        uses: cachix/cachix-action@v12
+        uses: cachix/cachix-action@v14
         with:
           name: wuvt
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -37,13 +38,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Nix
-        uses: cachix/install-nix-action@v18
+        uses: cachix/install-nix-action@v25
 
       - name: Setup Cachix
-        uses: cachix/cachix-action@v12
+        uses: cachix/cachix-action@v14
         with:
           name: wuvt
           authToken: '${{ secrets.CACHIX_AUTH_TOKEN }}'
@@ -52,25 +53,25 @@ jobs:
         run: nix build .#stackman-container
 
       - name: Upload the built Docker image
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: docker
           path: result
 
   push-image:
     name: Publish the Docker image to GitHub
-    if: github.ref != 'refs/heads/staging' && github.ref != 'refs/heads/trying'
+    if: github.event_name != 'merge_group'
     needs: build-image
     runs-on: ubuntu-latest
     steps:
       - name: Download the build Docker image
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: docker
 
       - name: Generate tags
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v5
         with:
           images: ghcr.io/wuvt/stackman
           sep-tags: " "
