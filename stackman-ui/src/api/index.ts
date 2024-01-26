@@ -22,10 +22,10 @@ const useQuery = <T>(query?: string): QueryResult<T> => {
       })
         .then((res) => res.json())
         .then((data: T) =>
-          setResult({ data, error: undefined, isLoading: false })
+          setResult({ data, error: undefined, isLoading: false }),
         )
         .catch((error) =>
-          setResult({ data: undefined, error, isLoading: false })
+          setResult({ data: undefined, error, isLoading: false }),
         );
     }
 

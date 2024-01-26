@@ -131,7 +131,7 @@ const Player = (props: PlayerProps) => {
         class={styles.playSlider}
         onChange={(e) => {
           audio.current.currentTime = parseFloat(
-            (e.currentTarget as HTMLInputElement).value
+            (e.currentTarget as HTMLInputElement).value,
           );
         }}
       />

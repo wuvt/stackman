@@ -14,7 +14,7 @@ const CopyExtraAssets = ({ assets } = { assets: [] }) => {
             fileName: path.join(asset.dest, path.basename(asset.src)),
             source: await fs.readFile(asset.src),
           });
-        })
+        }),
       );
     },
   };
