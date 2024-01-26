@@ -14,10 +14,10 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
   },
   "include": ["node_modules/wmr/types.d.ts", "public/**/*"],
   "typeAcquisition": {
-    "enable": true
-  }
+    "enable": true,
+  },
 }

@@ -70,7 +70,7 @@ const Select = ({ name, items, label, onChange }: SelectProps) => {
         e.preventDefault();
         const index = Math.min(
           orderedItems.indexOf(active) + 1,
-          items.length - 1
+          items.length - 1,
         );
         setActive(orderedItems[index]);
       } else if (key === 'ArrowUp') {
